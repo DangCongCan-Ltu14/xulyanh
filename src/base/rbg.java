@@ -1,0 +1,95 @@
+package base;
+
+public class rbg {
+	private int a, r, b, g;
+
+	public int getA() {
+		return a;
+	}
+
+	public int getR() {
+		return r;
+	}
+
+	public int getB() {
+		return b;
+	}
+
+	public int getG() {
+		return g;
+	}
+
+	public rbg(int sl) {
+
+		add(sl);
+
+	}
+
+	public rbg(int la, int lr, int lb, int lg) {
+
+		a = la;
+		r = lr;
+		g = lg;
+		b = lb;
+
+	}
+
+	public rbg(int[] is) {
+		// TODO Auto-generated constructor stub
+		a = is[0];
+		r = is[1];
+		g = is[2];
+		b = is[3];
+	}
+
+	public void reset() {
+		// TODO Auto-generated method stub
+		a = 0;
+		r = 0;
+		g = 0;
+		b = 0;
+	}
+
+	protected void add(int sl) {
+		a = a + ((sl & 0xff000000) >> 24);
+		r = r + ((sl & 0xff0000) >> 16);
+		b = b + ((sl & 0xff00) >> 8);
+		g = g + (sl & 0xff);
+		// System.out.println(r+" "+b+" "+g);
+	}
+
+	public void add(int sl, int k) {
+		a = a + ((sl & 0xff000000) >> 24) * k;
+		r = r + ((sl & 0xff0000) >> 16) * k;
+		b = b + ((sl & 0xff00) >> 8) * k;
+		g = g + (sl & 0xff) * k;
+		// System.out.println(r+" "+b+" "+g);
+	}
+
+	public int div(int d) {
+		if (d == 0)
+			return get();
+		a = a / d;
+		b = b / d;
+		r = r / d;
+		g = g / d;
+		return get();
+	}
+
+	public int get() {
+		int res = 0;
+		res = (r << 16) | (b << 8) | g | (a << 24);
+		return res;
+	}
+
+	public void tpr(int i) {
+		System.out.println(i + " " + a + " " + r + " " + b + " " + g + " ");
+	}
+
+	public static boolean cmp(rbg a, rbg b) {
+		return (a.a == b.a) && (a.r == b.r) && (a.g == b.g) && (a.b == b.b);
+	}
+	public String tohex() {
+		return String.format("#%02x%02x%02x", r,b,g).toUpperCase();
+	}
+}

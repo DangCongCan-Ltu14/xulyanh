@@ -1,0 +1,24 @@
+package potrace;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import base.point;
+
+public class stack {
+	List<point> p = new ArrayList<point>();
+
+	protected void push(point pl) {
+		p.add(pl);
+
+	}
+
+	protected point pop() {
+		return p.remove(0);
+	}
+
+	protected boolean end() {
+		return p.isEmpty();
+	}
+
+}
