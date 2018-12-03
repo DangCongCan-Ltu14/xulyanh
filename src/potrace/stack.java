@@ -1,12 +1,12 @@
 package potrace;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import base.point;
 
 public class stack {
-	List<point> p = new ArrayList<point>();
+	List<point> p = new LinkedList<point>();
 
 	protected void push(point pl) {
 		p.add(pl);

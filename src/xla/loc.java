@@ -7,12 +7,9 @@ import base.rbg;
 
 public class loc {
 	// static int[][] ttc = { { 0, -1, 0 }, { -1, 4 , -1 }, { 0,-1, 0} };
-	static int[][] ttc = { { 1, 1, 1 }, 
-			{ 1, -8, 1 }, 
-			{ 1, 1, 1 } };
-	// static int[][] ttc = { {
-	// 0,0,-1,0,0},{0,-1,-2,-1,0},{-1,-2,16,-2,-1},{0,-1,-2,-1,0},{
-	// 0,0,-1,0,0}};
+	static int[][] ttc = { { -1, -2, -1 }, 
+			{ -2, 19, -2 }, 
+			{ -1, -2, -1 } };
 	static int[][] lgs = { { 2, 4, 5, 4, 2 }, { 4, 9, 12, 9, 4 }, { 5, 12, 15, 12, 5 }, { 4, 9, 12, 9, 4 },
 			{ 2, 4, 5, 4, 2 } };
 	static int[][] ttb = { { 1, 1, 1 }, { 1, 1, 1 }, { 1, 1, 1 } };
@@ -22,8 +19,8 @@ public class loc {
 	static int plag = -1;
 	static int[][] cb = { { 0, 1, 0 }, { 1, 1, 1 }, { 0, 1, 0 } };
 
-	static protected BufferedImage cv(BufferedImage in, int[][] H) {
-		ktcsl(H);
+	static protected BufferedImage cv(BufferedImage in, int[][] H,int sc) {
+		csl=sc;
 		int x = in.getWidth();
 		int y = in.getHeight();
 		rbg l = new rbg(0);
@@ -49,8 +46,8 @@ public class loc {
 		return res;
 	}
 
-	static protected BufferedImage exb(BufferedImage in, int[][] H) {
-		ktcsl(H);
+	static protected BufferedImage exb(BufferedImage in, int[][] H,int vv) {
+		int  csl =vv;
 		int x = in.getWidth();
 		int y = in.getHeight();
 		rbg l = new rbg(0);
@@ -134,6 +131,9 @@ public class loc {
 	 * @param a
 	 * @return
 	 */
+	// static int[][] ttc = { {
+		// 0,0,-1,0,0},{0,-1,-2,-1,0},{-1,-2,16,-2,-1},{0,-1,-2,-1,0},{
+		// 0,0,-1,0,0}};
 	static int graycolor(int a) {
 		int i = 0;
 		// int[] k = new int[5];
@@ -147,25 +147,43 @@ public class loc {
 		return i;
 
 	}
-
-	static private void ktcsl(int[][] H) {
+	/**
+	 * cong tat ca
+	 */
+	static private int ctc(int[][] H) {
 		// TODO Auto-generated method stub
-		csl = 0;
+		int csl = 0;
+		int v = H.length;
+		for (int i = 0; i < v; i++) {
+			for (int j = 0; j < v; j++)
+				//if (H[i][j] > 0)
+					csl = csl + H[i][j];
+		}
+		if (csl < 1)
+			csl = 1;
+		//System.out.println(csl);
+		return csl;
+	}
+	/**
+	 * cong so duong
+	 */
+	static private int csd(int[][] H) {
+		// TODO Auto-generated method stub
+		int csl = 0;
 		int v = H.length;
 		for (int i = 0; i < v; i++) {
 			for (int j = 0; j < v; j++)
 				if (H[i][j] > 0)
 					csl = csl + H[i][j];
 		}
-		if (csl == 0)
-			csl = 1;
-		System.out.println(csl);
+		return csl;
+		//System.out.println(csl);
+		
 	}
-
 	public static BufferedImage tc(BufferedImage in) {
 		// TODO Auto-generated method stub
 
-		return cv(in, ttc);
+		return cv(in, ttc,ctc(ttc));
 	}
 
 	/**
@@ -177,13 +195,13 @@ public class loc {
 	public static BufferedImage tb(BufferedImage in) {
 		// TODO Auto-generated method stub
 
-		return cv(in, ttb);
+		return cv(in, ttb,ctc(ttb));
 	}
 
 	public static BufferedImage hcb(BufferedImage in) {
 		// TODO Auto-generated method stub
 
-		return exb(in, cb);
+		return exb(in, cb,ctc(cb));
 	}
 
 	/**
@@ -194,7 +212,7 @@ public class loc {
 	 */
 	public static BufferedImage tg(BufferedImage in) {
 		// TODO Auto-generated method stub
-		return cv(in, lgs);
+		return cv(in, lgs,csd(lgs));
 	}
 
 	public static BufferedImage edge(BufferedImage in) {

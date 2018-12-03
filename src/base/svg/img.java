@@ -8,9 +8,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import base.point;
 import base.rbg;
+import cuver.catmull;
 
 public class img {
 	private int x, y;
@@ -52,7 +54,7 @@ public class img {
 		// TODO Auto-generated method stub
 		//System.gc();
 		for (polygon d : p) {
-			ArrayList<point> ps = d.p;
+			List<point> ps = d.p;
 			point h = ps.get(0);
 			out.write("<path d=\" M " + h.getx() + " " + h.gety() + " ");
 			for (point k : ps) {
@@ -63,13 +65,19 @@ public class img {
 		}
 		out.write("</svg>");
 	}
-
+	public void khoiphuc()
+	{
+		for(polygon d:p)
+		{
+			d.p=catmull.tcat(d.p);
+		}
+	}
 	public BufferedImage paintimg() {
 
 		BufferedImage res = new BufferedImage(x, y, BufferedImage.TYPE_INT_RGB);
 		Graphics g = res.getGraphics();
 		for (polygon d : p) {
-			ArrayList<point> arr = d.p;
+			List<point> arr = d.p;
 			int s=arr.size();
 			if(s<5) System.out.println("loi"+d.getColor());
 			g.setColor(new Color(d.getColor()));

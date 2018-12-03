@@ -1,7 +1,8 @@
 package potrace;
 
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import base.point;
 import base.svg.img;
@@ -50,8 +51,8 @@ public class vector {
 		}
 	}
 
-	public ArrayList<point> getedge(point a, int color, int t) {
-		ArrayList<point> p = new ArrayList<point>();
+	public List<point> getedge(point a, int color, int t) {
+		List<point> p = new LinkedList<point>();
 		p.add(a);
 		int turn = t;
 		int site = 0;
@@ -84,7 +85,7 @@ public class vector {
 		//return p;
 	}
 
-	protected boolean end(ArrayList<point> p, int site) {
+	protected boolean end(List<point> p, int site) {
 		int a = p.get(0).getx() - p.get(site).getx();
 		int b = p.get(0).gety() - p.get(site).gety();
 		return (a != 0 || b != 0);
@@ -270,8 +271,8 @@ public class vector {
 		return res;
 	}
 
-	public static ArrayList<point> taoPart(ArrayList<point> p) {
-		ArrayList<point> part = new ArrayList<point>();
+	public static List<point> taoPart(List<point> p) {
+		List<point> part = new LinkedList<point>();
 		point stack = p.get(0);
 		int i=1;
 		double[] res = new double[2];
@@ -298,32 +299,14 @@ public class vector {
 		part.add(p.get(k));
 		return part;
 	}
-	public static ArrayList<point> taoPart2(ArrayList<point> p)
+	public static List<point> taoPart2(List<point> p)
 	{
-		//System.out.print("ssss");
-		ArrayList<point> part = new ArrayList<point>();
+		List<point> part = new LinkedList<point>();
 		int dx=0,dy=0;
-		int i=0;int dem=0;
+		int i=0;
 		int a,b;
 		boolean con=true;
-		// tim su khac biet
-//		while(con)
-//		{
-//			a=p.get(i+1).getx()-p.get(i).getx();
-//			b=p.get(i+1).getx()-p.get(i).getx();
-//			if(a!=0)
-//			{
-//				if(dx==0) dx=a;
-//				else con=(dx==a);
-//			}
-//			if(b!=0)
-//			{
-//				if(dy==0) dy=b;
-//				else con=(dx==b);
-//			}
-//			i++;
-//			
-//		}
+	
 		double[] res = new double[2];
 		boolean tl=false;
 		res[1] = -str;
@@ -366,11 +349,11 @@ public class vector {
 		part.add(p.get(k));
 		return part;
 	}
-	public static ArrayList<point> taoPart1(ArrayList<point> p)
+	public static List<point> taoPart1(List<point> p)
 	{
 		int dis=1;
 		int ls=4;
-		ArrayList<point> path=new ArrayList<point> ();
+		List<point> path=new LinkedList<point> ();
 		int s=p.size();
 		path.add(p.get(0));
 		for(int i=1;i<s;i=i+dis)

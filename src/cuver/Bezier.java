@@ -73,7 +73,6 @@ class cv extends Canvas
 		for (point i : arr) {
 			g.drawLine(p.getx(), p.gety(), i.getx(), i.gety());
 			p = i;
-			// System.out.print(mcat[i][j] + " ");
 		}
 		g.dispose();
 	}

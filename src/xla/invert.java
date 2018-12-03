@@ -42,7 +42,7 @@ public class invert extends JFrame {
 		super.paint(g);
 
 		if (in != null) {
-			g.drawImage(in, 50 ,50, null);
+			g.drawImage(in, 50, 50, null);
 		}
 
 	}
@@ -60,43 +60,41 @@ public class invert extends JFrame {
 
 	void cs() throws IOException {
 		in = get(file);
-//		System.out.println(in.getWidth() + " " + in.getHeight());
-//		in = loc.tg(in);
-//		in = new imgs(in, 10).segment();
-//		vector pk = new vector(in);
-//		img is=pk.creat();
-//		polygon p=is.getpl(210);
-//		in=catmull.draw(in.getWidth(), in.getHeight(), p.getP());
-//		is.create("xcmn", "/home/amneiht/sdf");
-		//in=loc.exp(in, 3);
-		in=loc.tg(in);
-		in=loc.tc(in);
-		
+		 System.out.println(in.getWidth() + " " + in.getHeight());
+		 in = loc.tg(in);
+		 in = new imgs(in, 3).segment();
+		 vector pk = new vector(in);
+		 img is=pk.creat();
+		 polygon p=is.getpl(10);
+		 in=catmull.draw(in.getWidth(), in.getHeight(),p);
+		// is.create("xcmn", "/home/amneiht/sdf");
+		//loc.imggray(in);
+		//in = new imgs(in, 10).segment();
+		//in=loc.hcb(in);
 	}
+
 	public static void pr(int[][] stn) {
 		// TODO Auto-generated method stub
 		int a = stn.length;
 		int b = stn[0].length;
 		for (int i = 0; i < a; i++) {
 			System.out.print(i + "  ");
-			for (int j = 0; j < b; j++)
-			{
-				
-				switch(stn[i][j])
-				{
+			for (int j = 0; j < b; j++) {
+
+				switch (stn[i][j]) {
 				case 0:
 					System.out.print(0 + " ");
 					break;
 				case -15916254:
 					System.out.print(1 + " ");
-				break;
+					break;
 				case -13415877:
 					System.out.print(2 + " ");
 					break;
 				case -11439249:
 					System.out.print(3 + " ");
 					break;
-					
+
 				default:
 					System.out.print(4 + " ");
 					break;
@@ -106,13 +104,13 @@ public class invert extends JFrame {
 		}
 
 	}
+
 	BufferedImage paintline(ArrayList<point> arr, int col) {
 
 		int x = in.getWidth(), y = in.getHeight();
 		BufferedImage res = new BufferedImage(x, y, BufferedImage.TYPE_INT_RGB);
 		Graphics g = res.getGraphics();
 		g.setColor(new Color(col));
-		point p = arr.get(0);
 		Polygon pl = new Polygon();
 		for (point i : arr) {
 			pl.addPoint(i.getx(), i.gety());

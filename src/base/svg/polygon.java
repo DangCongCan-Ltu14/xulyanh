@@ -1,12 +1,13 @@
 package base.svg;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import base.point;
 
 public class polygon {
-	protected ArrayList<point> p;
-	public ArrayList<point> getP() {
+	protected List<point> p;
+	public List<point> getP() {
 		return p;
 	}
 
@@ -17,7 +18,7 @@ public class polygon {
 		p = new ArrayList<point>();
 	}
 
-	public polygon(int c, ArrayList<point> k) {
+	public polygon(int c,List<point> k) {
 		color = c;
 		p = k;
 	}
