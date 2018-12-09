@@ -6,6 +6,10 @@ public class creline {
 	
 	// static double tx, x0, ty, y0;
 	private static int half =1;
+	protected static void setHalf(int half) {
+		creline.half = half;
+	}
+
 	static final double str=Double.MAX_VALUE;
 	public static double line(point a, point b) {
 		double tx = b.getx() - a.getx();

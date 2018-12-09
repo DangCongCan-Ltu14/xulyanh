@@ -20,11 +20,12 @@ public class vector {
 	static final int trai = 1, phai = 0b10, tren = 0b100, duoi = 0b1000, trong = 0, ngoai = 0;
 	public int dem = 0;
 
-	public vector(BufferedImage in) {
+	public vector(BufferedImage in, int p) {
 		x = in.getWidth() + 2;
 		y = in.getHeight() + 2;
 		img = new int[x][y];
 		tdt(in);
+		creline.setHalf(p);
 	}
 
 	public vector(int[][] in) {
@@ -81,8 +82,8 @@ public class vector {
 			p.add(new point(x, y));
 			site++;
 		} while (end(p, site));
-		 return taoPart2(p);
-		//return p;
+		return taoPart2(p);
+		// return p;
 	}
 
 	protected boolean end(List<point> p, int site) {
@@ -129,7 +130,7 @@ public class vector {
 				int color = img[i + 1][j + 1];
 				int turn = check(a);
 				if (turn > 0) {
-					
+
 					sr.add(new poly(color, getedge(a, color, turn)));
 					clear(i + 1, j + 1, color);
 				}
@@ -246,6 +247,7 @@ public class vector {
 		}
 		return k;
 	}
+
 	static boolean change(double[] a, double[] b) {
 		if (b[0] < a[1])
 			return false;
@@ -274,13 +276,13 @@ public class vector {
 	public static List<point> taoPart(List<point> p) {
 		List<point> part = new LinkedList<point>();
 		point stack = p.get(0);
-		int i=1;
+		int i = 1;
 		double[] res = new double[2];
 		res[1] = -str;
 		res[0] = str;
 		int k = p.size() - 1;
 
-		for (i=1; i < k; i++) {
+		for (i = 1; i < k; i++) {
 
 			double[] sd = creline.region(stack, p.get(i));
 			boolean tl = change(res, sd);
@@ -299,69 +301,68 @@ public class vector {
 		part.add(p.get(k));
 		return part;
 	}
-	public static List<point> taoPart2(List<point> p)
-	{
+
+	public static List<point> taoPart2(List<point> p) {
 		List<point> part = new LinkedList<point>();
-		int dx=0,dy=0;
-		int i=0;
-		int a,b;
-		boolean con=true;
-	
+		int dx = 0, dy = 0;
+		int i = 0;
+		int a, b;
+		boolean con = true;
+
 		double[] res = new double[2];
-		boolean tl=false;
+		boolean tl = false;
 		res[1] = -str;
 		res[0] = str;
 		int k = p.size() - 1;
 		point stack = p.get(0);
-		for (i=0; i < k; i++) {
-			a=p.get(i+1).getx()-p.get(i).getx();
-			b=p.get(i+1).getx()-p.get(i).getx();
-			
-			if(a!=0)
-			{
-				if(dx==0) dx=a;
-				else con=(dx==a)&&con;
+		for (i = 0; i < k; i++) {
+			a = p.get(i + 1).getx() - p.get(i).getx();
+			b = p.get(i + 1).getx() - p.get(i).getx();
+
+			if (a != 0) {
+				if (dx == 0)
+					dx = a;
+				else
+					con = (dx == a) && con;
 			}
-			if(b!=0)
-			{
-				if(dy==0) dy=b;
-				else con=(dx==b)&&con;
+			if (b != 0) {
+				if (dy == 0)
+					dy = b;
+				else
+					con = (dx == b) && con;
 			}
-			
+
 			double[] sd = creline.region(stack, p.get(i));
 			tl = change(res, sd);
-			
-			
-			
-			if ((!tl)||(!con)) {
-				con=true;
+
+			if ((!tl) || (!con)) {
+				con = true;
 				part.add(p.get(i - 1));
 				stack = p.get(i - 1);
-				dx=0;
-				dy=0;
+				dx = 0;
+				dy = 0;
 				res[1] = -str;
 				res[0] = str;
 				i = i - 1;
 			}
 
 		}
-		
+
 		part.add(p.get(k));
 		return part;
 	}
-	public static List<point> taoPart1(List<point> p)
-	{
-		int dis=1;
-		int ls=4;
-		List<point> path=new LinkedList<point> ();
-		int s=p.size();
+
+	public static List<point> taoPart1(List<point> p) {
+		int dis = 1;
+		int ls = 4;
+		List<point> path = new LinkedList<point>();
+		int s = p.size();
 		path.add(p.get(0));
-		for(int i=1;i<s;i=i+dis)
-		{
-			if((p.get(i).getx()%ls==0)||(p.get(i).gety()%ls==0))
-			path.add(p.get(i));
+		for (int i = 1; i < s; i = i + dis) {
+			if ((p.get(i).getx() % ls == 0) || (p.get(i).gety() % ls == 0))
+				path.add(p.get(i));
 		}
-		path.add(p.get(s-1));
-		return path ;
+		path.add(p.get(s - 1));
+		return path;
 	}
 }

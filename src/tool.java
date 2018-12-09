@@ -25,8 +25,10 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import base.svg.img;
 import file.sjpg;
 import file.spng;
+import potrace.vector;
 import segment.imgs;
 import xla.buff;
 import xla.loc;
@@ -52,9 +54,13 @@ public class tool extends JFrame implements ActionListener, WindowListener {
 	private JMenuItem LocTrungBinh;
 	private JMenuItem LocLaplace;
 	private JMenuItem SaveAs;
-
 	List<BufferedImage> his = new LinkedList<BufferedImage>();
 	int x = 0, y = 0;
+	img is = null;
+
+	private JMenu Potrace;
+	private JMenuItem Vector;
+	private JMenuItem KhoiPhuc;
 
 	public tool() {
 		this.addWindowListener(this);
@@ -122,8 +128,14 @@ public class tool extends JFrame implements ActionListener, WindowListener {
 		segment = new JMenuItem("segment");
 		mnEdit.add(segment);
 
-		JMenuItem Potrace = new JMenuItem("potrace");
+		Potrace = new JMenu("potrace");
 		mnEdit.add(Potrace);
+
+		Vector = new JMenuItem("vector");
+		Potrace.add(Vector);
+
+		KhoiPhuc = new JMenuItem("khoi phuc");
+		Potrace.add(KhoiPhuc);
 
 		mnHelp = new JMenu("help");
 		menuBar.add(mnHelp);
@@ -165,6 +177,8 @@ public class tool extends JFrame implements ActionListener, WindowListener {
 		SaveAs.addActionListener(this);
 		gray.addActionListener(this);
 		Invert.addActionListener(this);
+		Vector.addActionListener(this);
+		KhoiPhuc.addActionListener(this);
 	}
 
 	/**
@@ -190,7 +204,6 @@ public class tool extends JFrame implements ActionListener, WindowListener {
 		p.setVisible(true);
 	}
 
-	
 	public void actionPerformed(ActionEvent e) {
 		// System.out.println("xcmn");
 		if (e.getSource() == Open) {
@@ -219,17 +232,54 @@ public class tool extends JFrame implements ActionListener, WindowListener {
 		} else if (e.getSource() == LocLaplace) {
 			loLaplace();
 		} else if (e.getSource() == Invert) {
-			int d = his.size();
-			if (d > 0) {
-				BufferedImage in = loc.imgiv(his.get(d - 1));
-				addlist(in);
-			}
-			repaint();
+			doinvert();
 		} else if (e.getSource() == gray) {
 			dogray();
 		} else if (e.getSource() == segment) {
 			dosegment();
+		} else if (e.getSource() == Vector) {
+			dovecto();
+		} else if (e.getSource() == KhoiPhuc) {
+			dokhoiphuc();
 		}
+
+	}
+
+	private void dokhoiphuc() {
+		if (is != null) {
+			is.khoiphuc();
+			addlist(is.paintimg());
+			repaint();
+		}
+
+	}
+
+	private void dovecto() {
+		is = null;
+		System.gc();
+		String s = (String) JOptionPane.showInputDialog(this, "amneiht", "nhap sai so", JOptionPane.PLAIN_MESSAGE);
+		try {
+			int d = his.size();
+			int p = Integer.parseInt(s);
+			if (d > 0) {
+				is = new vector(his.get(d - 1), p).creat();
+				addlist(is.paintimg());
+			}
+		} catch (Exception se) {
+			se.printStackTrace();
+
+		}
+		repaint();
+
+	}
+
+	private void doinvert() {
+		int d = his.size();
+		if (d > 0) {
+			BufferedImage in = loc.imgiv(his.get(d - 1));
+			addlist(in);
+		}
+		repaint();
 
 	}
 
@@ -333,6 +383,7 @@ public class tool extends JFrame implements ActionListener, WindowListener {
 	public void windowDeactivated(WindowEvent e) {
 
 	}
+
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
