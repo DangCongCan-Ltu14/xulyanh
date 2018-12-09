@@ -6,7 +6,7 @@ import java.util.List;
 
 import base.point;
 import base.svg.img;
-import base.svg.polygon;
+import base.svg.poly;
 
 /**
  * @author amneiht
@@ -81,7 +81,7 @@ public class vector {
 			p.add(new point(x, y));
 			site++;
 		} while (end(p, site));
-		 return taoPart(p);
+		 return taoPart2(p);
 		//return p;
 	}
 
@@ -130,7 +130,7 @@ public class vector {
 				int turn = check(a);
 				if (turn > 0) {
 					
-					sr.add(new polygon(color, getedge(a, color, turn)));
+					sr.add(new poly(color, getedge(a, color, turn)));
 					clear(i + 1, j + 1, color);
 				}
 			}

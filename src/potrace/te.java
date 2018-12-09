@@ -3,7 +3,7 @@ package potrace;
 import java.util.ArrayList;
 
 import base.point;
-import base.svg.polygon;
+import base.svg.poly;
 
 public class te {
 	static int[][] ps= {

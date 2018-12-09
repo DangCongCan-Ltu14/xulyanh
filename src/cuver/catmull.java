@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import base.point;
-import base.svg.polygon;
+import base.svg.poly;
 
 public class catmull {
 
@@ -23,7 +23,7 @@ public class catmull {
 	}
 
 	static int[][] mcat = { { -1, 3, -3, 1 }, { 2, -5, 4, -1 }, { -1, 0, 1, 0 }, { 0, 2, 0, 0 } };
-	public static BufferedImage draw(int x, int y,polygon p ) {
+	public static BufferedImage draw(int x, int y,poly p ) {
 		List<point> arr=p.getP();
 		BufferedImage res = new BufferedImage(x, y, BufferedImage.TYPE_INT_RGB);
 		Graphics g = res.getGraphics();

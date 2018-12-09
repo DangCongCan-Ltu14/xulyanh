@@ -23,13 +23,13 @@ public class img {
 		y = dy;
 	}
 
-	private ArrayList<polygon> p = new ArrayList<polygon>();
+	private ArrayList<poly> p = new ArrayList<poly>();
 
-	public void add(polygon pd) {
+	public void add(poly pd) {
 		p.add(pd);
 		dem++;
 	}
-	public polygon getpl(int i)
+	public poly getpl(int i)
 	{
 		return p.get(i);
 	}
@@ -53,7 +53,7 @@ public class img {
 	private void printl(FileWriter out) throws IOException {
 		// TODO Auto-generated method stub
 		//System.gc();
-		for (polygon d : p) {
+		for (poly d : p) {
 			List<point> ps = d.p;
 			point h = ps.get(0);
 			out.write("<path d=\" M " + h.getx() + " " + h.gety() + " ");
@@ -67,26 +67,24 @@ public class img {
 	}
 	public void khoiphuc()
 	{
-		for(polygon d:p)
+		for(poly d:p)
 		{
 			d.p=catmull.tcat(d.p);
 		}
 	}
+	
 	public BufferedImage paintimg() {
 
 		BufferedImage res = new BufferedImage(x, y, BufferedImage.TYPE_INT_RGB);
 		Graphics g = res.getGraphics();
-		for (polygon d : p) {
+		for (poly d : p) {
 			List<point> arr = d.p;
-			int s=arr.size();
-			if(s<5) System.out.println("loi"+d.getColor());
+		//	int s=arr.size();
+		//	if(s<5) System.out.println("loi"+d.getColor());
 			g.setColor(new Color(d.getColor()));
 			Polygon pl = new Polygon();
 			for (point i : arr) {
-				// g.drawLine(p.getx(), p.gety(), i.getx(), i.gety());
-				// p = i;
 				pl.addPoint(i.getx(), i.gety());
-				// System.out.print(mcat[i][j] + " ");
 			}
 			g.fillPolygon(pl);
 		}

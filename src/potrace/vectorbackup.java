@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import base.point;
 import base.svg.img;
-import base.svg.polygon;
+import base.svg.poly;
 
 /**
  * @author amneiht
@@ -132,7 +132,7 @@ public class vectorbackup {
 				int turn = check(a, color);
 				if (turn > 0) {
 					
-					sr.add(new polygon(color, getedge(a, color, turn)));
+					sr.add(new poly(color, getedge(a, color, turn)));
 					 clear(i,j,color);
 					 //dem++;
 					 System.out.println("toa do "+i+" "+j);

@@ -6,10 +6,10 @@ import java.awt.image.BufferedImage;
 import base.rbg;
 
 public class loc {
-	// static int[][] ttc = { { 0, -1, 0 }, { -1, 4 , -1 }, { 0,-1, 0} };
-	static int[][] ttc = { { -1, -2, -1 }, 
-			{ -2, 19, -2 }, 
-			{ -1, -2, -1 } };
+	 static int[][] ttc = { { 0, -1, 0 }, { -1, 4 , -1 }, { 0,-1, 0} };
+//	static int[][] ttc = { { -1, -2, -1 }, 
+//			{ -2, 19, -2 }, 
+//			{ -1, -2, -1 } };
 	static int[][] lgs = { { 2, 4, 5, 4, 2 }, { 4, 9, 12, 9, 4 }, { 5, 12, 15, 12, 5 }, { 4, 9, 12, 9, 4 },
 			{ 2, 4, 5, 4, 2 } };
 	static int[][] ttb = { { 1, 1, 1 }, { 1, 1, 1 }, { 1, 1, 1 } };
@@ -93,36 +93,36 @@ public class loc {
 		}
 		return res;
 	}
-	protected static void imgiv(BufferedImage in) {
+	public static BufferedImage imgiv(BufferedImage in) {
 		int x = in.getWidth();
 		int y = in.getHeight();
 		int l = 0;
-
+		BufferedImage res = new BufferedImage(x, y, BufferedImage.TYPE_INT_RGB);
 		for (int i = 0; i < x; i++) {
 			for (int j = 0; j < y; j++) {
 				l = in.getRGB(i, j); // co the co loi
 				l = ~l;
 				// l = graycolor(l);
-				in.setRGB(i, j, l);
+				res.setRGB(i, j, l);
 			}
 		}
-
+		return res;
 	}
 
-	protected static void imggray(BufferedImage in) {
+	public static BufferedImage imggray(BufferedImage in) {
 		int x = in.getWidth();
 		int y = in.getHeight();
 		int l = 0;
-
+		BufferedImage res = new BufferedImage(x, y, BufferedImage.TYPE_INT_RGB);
 		for (int i = 0; i < x; i++) {
 			for (int j = 0; j < y; j++) {
 				l = in.getRGB(i, j); // co the co loi
 				// =~l;
 				l = graycolor(l);
-				in.setRGB(i, j, l);
+				res.setRGB(i, j, l);
 			}
 		}
-
+		return res;
 	}
 
 	/**
