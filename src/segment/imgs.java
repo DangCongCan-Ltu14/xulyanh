@@ -11,7 +11,7 @@ public class imgs {
 	int[][] mg;
 	int[][] last;
 	int[][] img;
-	rbg[] cent;
+	protected rbg[] cent;
 	int k = 1;
 	Random rand = new Random();
 	int type;

@@ -9,7 +9,7 @@ public class sjpg extends FileFilter {
 
 	public boolean accept(File f) {
 		if (f.isDirectory()) {
-			return false;
+			return true;
 		}
 
 		String s = f.getName();
@@ -18,7 +18,7 @@ public class sjpg extends FileFilter {
 	}
 
 	public String getDescription() {
-		return "*.jpg,*.JPG";
+		return list.jpg;
 	}
 	
 

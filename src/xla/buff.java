@@ -14,7 +14,7 @@ import javax.imageio.ImageIO;
 import base.point;
 
 public class buff {
-	//static int csl = 0;
+	// static int csl = 0;
 
 	BufferedImage in;
 
@@ -32,13 +32,18 @@ public class buff {
 		return res;
 	}
 
-	public void save(BufferedImage in, String s) throws IOException {
-		File outputfile = new File(s);
-		ImageIO.write(in, "jpg", outputfile);
+	public static void save(BufferedImage in, String s, String extend) {
+		try {
+			File outputfile = new File(s+"."+extend);
+			ImageIO.write(in, extend, outputfile);
+			System.out.println(extend);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static BufferedImage get(String f) throws IOException {
-		System.out.println(f);
+		//System.out.println(f);
 		BufferedImage in = ImageIO.read(new File(f));
 
 		BufferedImage newImage = new BufferedImage(in.getWidth(), in.getHeight(), BufferedImage.TYPE_INT_RGB);

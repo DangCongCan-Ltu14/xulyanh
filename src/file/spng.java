@@ -8,7 +8,7 @@ public class spng extends FileFilter {
 
 	public boolean accept(File f) {
 		if (f.isDirectory()) {
-			return false;
+			return true;
 		}
 
 		String s = f.getName();
@@ -17,7 +17,7 @@ public class spng extends FileFilter {
 	}
 
 	public String getDescription() {
-		return "png";
+		return list.png;
 	}
 	
 

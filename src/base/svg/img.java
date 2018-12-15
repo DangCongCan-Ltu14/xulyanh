@@ -18,6 +18,7 @@ public class img {
 	private int x, y;
 	static final String spe = File.separator;
 	public int dem=0;
+
 	public img(int dx, int dy) {
 		x = dx;
 		y = dy;
@@ -33,8 +34,8 @@ public class img {
 	{
 		return p.get(i);
 	}
-	public void create(String file, String foder) {
-		String cre = foder + spe + file + ".html";
+	public void create(String file) {
+		String cre = file + ".html";
 		FileWriter out;
 		try {
 			out = new FileWriter(cre);

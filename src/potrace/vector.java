@@ -1,5 +1,6 @@
 package potrace;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,7 +17,7 @@ public class vector {
 	static final double str = Double.MAX_VALUE;
 	int x, y;
 	public int[][] img;
-	int black = 0;// mau nen
+	static final int black = 0;//Color.black.getRGB();// mau nen
 	static final int trai = 1, phai = 0b10, tren = 0b100, duoi = 0b1000, trong = 0, ngoai = 0;
 	public int dem = 0;
 
@@ -123,7 +124,7 @@ public class vector {
 
 	public img creat() {
 		// int dem = 0;
-		img sr = new img(x, y);
+		img sr = new img(x-2, y-2);
 		for (int i = 0; i < x - 1; i++) {
 			for (int j = 0; j < y - 1; j++) {
 				point a = new point(i, j);
@@ -140,7 +141,7 @@ public class vector {
 	}
 
 	int check(point a) {
-		if (img[a.getx() + 1][a.gety() + 1] != black)
+		if (img[a.getx() + 1][a.gety() + 1] != black&&img[a.getx() + 1][a.gety() + 1]!=0)
 			return trai;
 		return 0;
 	}

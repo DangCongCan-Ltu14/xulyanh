@@ -1,0 +1,13 @@
+package file;
+
+public class list {
+	static String jpg = "*.jpg,*.JPG", png = "*.png,*.PNG";
+
+	public static String getex(String s) {
+		if (s.equals(jpg))
+			return "jpg";
+		else if (s.equals(png))
+			return "png";
+		return null;
+	}
+}

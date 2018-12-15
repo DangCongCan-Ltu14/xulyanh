@@ -29,6 +29,7 @@ import base.svg.img;
 import file.sjpg;
 import file.spng;
 import potrace.vector;
+import segment.bina;
 import segment.imgs;
 import xla.buff;
 import xla.loc;
@@ -61,6 +62,9 @@ public class tool extends JFrame implements ActionListener, WindowListener {
 	private JMenu Potrace;
 	private JMenuItem Vector;
 	private JMenuItem KhoiPhuc;
+	private JMenuItem Redo;
+	private JMenuItem Binary;
+	private JMenuItem Svg;
 
 	public tool() {
 		this.addWindowListener(this);
@@ -107,6 +111,9 @@ public class tool extends JFrame implements ActionListener, WindowListener {
 		SaveAs = new JMenuItem("save as");
 		File.add(SaveAs);
 
+		Svg = new JMenuItem("svg");
+		File.add(Svg);
+
 		Close = new JMenuItem("close");
 		File.add(Close);
 
@@ -128,6 +135,9 @@ public class tool extends JFrame implements ActionListener, WindowListener {
 		segment = new JMenuItem("segment");
 		mnEdit.add(segment);
 
+		Binary = new JMenuItem("binary");
+		mnEdit.add(Binary);
+
 		Potrace = new JMenu("potrace");
 		mnEdit.add(Potrace);
 
@@ -136,6 +146,9 @@ public class tool extends JFrame implements ActionListener, WindowListener {
 
 		KhoiPhuc = new JMenuItem("khoi phuc");
 		Potrace.add(KhoiPhuc);
+
+		Redo = new JMenuItem("redo");
+		mnEdit.add(Redo);
 
 		mnHelp = new JMenu("help");
 		menuBar.add(mnHelp);
@@ -179,6 +192,9 @@ public class tool extends JFrame implements ActionListener, WindowListener {
 		Invert.addActionListener(this);
 		Vector.addActionListener(this);
 		KhoiPhuc.addActionListener(this);
+		Redo.addActionListener(this);
+		Binary.addActionListener(this);
+		Svg.addActionListener(this);
 	}
 
 	/**
@@ -218,15 +234,7 @@ public class tool extends JFrame implements ActionListener, WindowListener {
 				System.out.println("sss");
 			repaint();
 		} else if (e.getSource() == SaveAs) {
-			JFileChooser chooser = new JFileChooser();
-			chooser.setCurrentDirectory(new java.io.File("."));
-			chooser.setDialogTitle("choosertitle");
-			chooser.setFileFilter(new sjpg());
-			chooser.setFileFilter(new spng());
-			if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
-				System.out.println("sss");
-			his.removeAll(his);
-			repaint();
+			dosaveAs();
 		} else if (e.getSource() == LocGauss) {
 			dogauss();
 		} else if (e.getSource() == LocLaplace) {
@@ -241,8 +249,83 @@ public class tool extends JFrame implements ActionListener, WindowListener {
 			dovecto();
 		} else if (e.getSource() == KhoiPhuc) {
 			dokhoiphuc();
+		} else if (e.getSource() == LocTrungBinh) {
+			doloctb();
+		} else if (e.getSource() == Redo) {
+			doctrlz();
+		} else if (e.getSource() == Binary) {
+			doBina();
+		} else if (e.getSource() == Svg) {
+			doSvg();
 		}
 
+	}
+
+	private void doSvg() {
+		if (is != null) {
+			int d = his.size();
+			if (d > 0) {
+				System.out.println("dosave");
+				JFileChooser chooser = new JFileChooser();
+				chooser.setCurrentDirectory(new java.io.File("/amneiht/sdf"));
+				chooser.setDialogTitle("choosertitle");
+				if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+					is.create(chooser.getSelectedFile().getPath());
+				}
+				//his.removeAll(his);
+				//is = null;
+			}
+		}
+		repaint();
+
+	}
+
+	private void doBina() {
+
+		int d = his.size();
+		if (d > 0) {
+			addlist(bina.segment(his.get(d - 1)));
+		}
+		repaint();
+	}
+
+	private void dosaveAs() {
+		int d = his.size();
+		if (d > 0) {
+			System.out.println("dosave");
+			JFileChooser chooser = new JFileChooser();
+			chooser.setCurrentDirectory(new java.io.File("."));
+			chooser.setDialogTitle("choosertitle");
+			chooser.setFileFilter(new sjpg());
+			chooser.setFileFilter(new spng());
+			if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+				String a = chooser.getSelectedFile().getPath();
+				String b = file.list.getex(chooser.getFileFilter().getDescription());
+				buff.save(his.get(d - 1), a, b);
+			}
+			//his.removeAll(his);
+			//is = null;
+		}
+		repaint();
+
+	}
+
+	private void doctrlz() {
+
+		int d = his.size();
+		if (d > 1) {
+			his.remove(d - 1);
+		}
+		repaint();
+	}
+
+	private void doloctb() {
+		int d = his.size();
+		if (d > 0) {
+			BufferedImage in = loc.tb(his.get(d - 1));
+			addlist(in);
+		}
+		repaint();
 	}
 
 	private void dokhoiphuc() {
@@ -296,10 +379,12 @@ public class tool extends JFrame implements ActionListener, WindowListener {
 		String s = (String) JOptionPane.showInputDialog(this, "amneiht", "nhap so mau", JOptionPane.PLAIN_MESSAGE);
 		try {
 			int d = his.size();
-			int p = Integer.parseInt(s);
-			if (d > 0) {
-				BufferedImage in = new imgs(his.get(d - 1), p).segment();
-				addlist(in);
+			if (s != null) {
+				int p = Integer.parseInt(s);
+				if (d > 0) {
+					BufferedImage in = new imgs(his.get(d - 1), p).segment();
+					addlist(in);
+				}
 			}
 		} catch (Exception se) {
 			se.printStackTrace();
@@ -321,12 +406,13 @@ public class tool extends JFrame implements ActionListener, WindowListener {
 
 	private void doOpen() {
 		JFileChooser chooser = new JFileChooser();
-		chooser.setCurrentDirectory(new java.io.File("."));
+		chooser.setCurrentDirectory(new java.io.File("/amneiht"));
 		chooser.setDialogTitle("choosertitle");
 
 		chooser.setAcceptAllFileFilterUsed(false);
 		if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 			try {
+				//
 				addlist(buff.get(chooser.getSelectedFile().getPath()));
 			} catch (IOException e1) {
 
