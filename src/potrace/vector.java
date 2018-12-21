@@ -1,6 +1,5 @@
 package potrace;
 
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 import java.util.List;

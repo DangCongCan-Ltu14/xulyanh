@@ -36,7 +36,8 @@ import xla.loc;
 
 public class tool extends JFrame implements ActionListener, WindowListener {
 	/**
-	 * 
+	 * @author amneiht
+	 *
 	 */
 	private static final long serialVersionUID = -2667525690602204291L;
 	private JMenuBar menuBar;
@@ -65,6 +66,7 @@ public class tool extends JFrame implements ActionListener, WindowListener {
 	private JMenuItem Redo;
 	private JMenuItem Binary;
 	private JMenuItem Svg;
+	private JMenuItem gauss2;
 
 	public tool() {
 		this.addWindowListener(this);
@@ -125,6 +127,9 @@ public class tool extends JFrame implements ActionListener, WindowListener {
 
 		LocGauss = new JMenuItem("loc gauss");
 		Loc.add(LocGauss);
+		
+		gauss2 = new JMenuItem("loc gauss 2");
+		Loc.add(gauss2);
 
 		LocTrungBinh = new JMenuItem("loc trung binh");
 		Loc.add(LocTrungBinh);
@@ -183,9 +188,7 @@ public class tool extends JFrame implements ActionListener, WindowListener {
 		Open.addActionListener(this);
 		LocGauss.addActionListener(this);
 		LocTrungBinh.addActionListener(this);
-		LocGauss.addActionListener(this);
 		LocLaplace.addActionListener(this);
-		LocGauss.addActionListener(this);
 		Save.addActionListener(this);
 		SaveAs.addActionListener(this);
 		gray.addActionListener(this);
@@ -195,6 +198,7 @@ public class tool extends JFrame implements ActionListener, WindowListener {
 		Redo.addActionListener(this);
 		Binary.addActionListener(this);
 		Svg.addActionListener(this);
+		gauss2.addActionListener(this);
 	}
 
 	/**
@@ -231,13 +235,11 @@ public class tool extends JFrame implements ActionListener, WindowListener {
 			chooser.setFileFilter(new sjpg());
 			chooser.setFileFilter(new spng());
 			if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
-				System.out.println("sss");
+				//System.out.println("sss");
 			repaint();
 		} else if (e.getSource() == SaveAs) {
 			dosaveAs();
-		} else if (e.getSource() == LocGauss) {
-			dogauss();
-		} else if (e.getSource() == LocLaplace) {
+		}else if (e.getSource() == LocLaplace) {
 			loLaplace();
 		} else if (e.getSource() == Invert) {
 			doinvert();
@@ -257,15 +259,38 @@ public class tool extends JFrame implements ActionListener, WindowListener {
 			doBina();
 		} else if (e.getSource() == Svg) {
 			doSvg();
-		}
+		} else if (e.getSource() == gauss2) {
+			dolocg2();
+		} else if (e.getSource() == LocGauss) {
+			dogauss();
+		} 
 
+	}
+
+	private void dolocg2() {
+		String s = (String) JOptionPane.showInputDialog(this, "nhap kich thuoc", "from", JOptionPane.PLAIN_MESSAGE);
+		try {
+			int d = his.size();
+			if (s != null) {
+				int p = Integer.parseInt(s);
+				if (d > 0) {
+					BufferedImage in = loc.tgex(his.get(d - 1), p);
+					addlist(in);
+				}
+			}
+		} catch (Exception se) {
+			se.printStackTrace();
+
+		}
+		repaint();
+		
 	}
 
 	private void doSvg() {
 		if (is != null) {
 			int d = his.size();
 			if (d > 0) {
-				System.out.println("dosave");
+				//System.out.println("dosave");
 				JFileChooser chooser = new JFileChooser();
 				chooser.setCurrentDirectory(new java.io.File("/amneiht/sdf"));
 				chooser.setDialogTitle("choosertitle");
@@ -292,7 +317,7 @@ public class tool extends JFrame implements ActionListener, WindowListener {
 	private void dosaveAs() {
 		int d = his.size();
 		if (d > 0) {
-			System.out.println("dosave");
+			//System.out.println("dosave");
 			JFileChooser chooser = new JFileChooser();
 			chooser.setCurrentDirectory(new java.io.File("."));
 			chooser.setDialogTitle("choosertitle");
@@ -428,6 +453,7 @@ public class tool extends JFrame implements ActionListener, WindowListener {
 	private void dogauss() {
 		int d = his.size();
 		if (d > 0) {
+		//	System.out.println("gause");
 			BufferedImage in = loc.tg(his.get(d - 1));
 			addlist(in);
 		}

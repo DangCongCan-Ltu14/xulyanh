@@ -6,21 +6,27 @@ import java.awt.image.BufferedImage;
 import base.rbg;
 
 public class loc {
-	 static int[][] ttc = { { 0, -1, 0 }, { -1, 4 , -1 }, { 0,-1, 0} };
-//	static int[][] ttc = { { -1, -2, -1 }, 
-//			{ -2, 19, -2 }, 
-//			{ -1, -2, -1 } };
-	static int[][] lgs = { { 2, 4, 5, 4, 2 }, { 4, 9, 12, 9, 4 }, { 5, 12, 15, 12, 5 }, { 4, 9, 12, 9, 4 },
-			{ 2, 4, 5, 4, 2 } };
+
+	// static int[][] ttc = { { -1, -2, -1 },
+	// { -2, 19, -2 },
+	// { -1, -2, -1 } };
+	// static int[][] lgs = { { 2, 4, 5, 4, 2 }, { 4, 9, 12, 9, 4 }, { 5, 12, 15,
+	// 12, 5 }, { 4, 9, 12, 9, 4 },
+	// { 2, 4, 5, 4, 2 } };
+	static int[][] ttc = { { 1, 1, 1 }, { 1, -8, 1 }, { 1, 1, 1 } };
+	static int[][] lgs = { { 1, 4, 7, 4, 1 }, { 4, 16, 26, 16, 4 }, { 7, 26, 41, 26, 7 }, { 4, 16, 26, 16, 4 },
+			{ 1, 4, 7, 4, 1 } };
 	static int[][] ttb = { { 1, 1, 1 }, { 1, 1, 1 }, { 1, 1, 1 } };
 	static int csl;
 	static int r = 30, b = 50, g = 30;
 	static int color = r + b + g;
 	static int plag = -1;
 	static int[][] cb = { { 0, 1, 0 }, { 1, 1, 1 }, { 0, 1, 0 } };
+	static double o = 0.7;
+	static double pi = 2 * Math.PI * (o * o);
 
-	static protected BufferedImage cv(BufferedImage in, int[][] H,int sc) {
-		csl=sc;
+	static protected BufferedImage cv(BufferedImage in, int[][] H, int sc) {
+		csl = sc;
 		int x = in.getWidth();
 		int y = in.getHeight();
 		rbg l = new rbg(0);
@@ -46,8 +52,8 @@ public class loc {
 		return res;
 	}
 
-	static protected BufferedImage exb(BufferedImage in, int[][] H,int vv) {
-		int  csl =vv;
+	static protected BufferedImage exb(BufferedImage in, int[][] H, int vv) {
+		int csl = vv;
 		int x = in.getWidth();
 		int y = in.getHeight();
 		rbg l = new rbg(0);
@@ -58,7 +64,7 @@ public class loc {
 		for (int i = 0; i < x; i++) {
 			for (int j = 0; j < y; j++) {
 				l.reset();
-				int k=in.getRGB(i, j);
+				int k = in.getRGB(i, j);
 				for (int a = 0; a < v; a++) {
 					for (int b = 0; b < v; b++) {
 
@@ -69,30 +75,28 @@ public class loc {
 							l.add(in.getRGB(a - lv + i, b - lv + j), H[a][b]);
 					}
 				}
-				
-				if ( k!=l.div(csl))
-				{
+
+				if (k != l.div(csl)) {
 					res.setRGB(i, j, bl);
-				}
-				else res.setRGB(i, j, k);
+				} else
+					res.setRGB(i, j, k);
 			}
 		}
 		return res;
 	}
-	static protected BufferedImage exp(BufferedImage in,int s)
-	{
-		int x = in.getWidth()*s;
-		int y = in.getHeight()*s;
+
+	static protected BufferedImage exp(BufferedImage in, int s) {
+		int x = in.getWidth() * s;
+		int y = in.getHeight() * s;
 		BufferedImage res = new BufferedImage(x, y, BufferedImage.TYPE_INT_RGB);
-		for(int i=0;i<x;i++)
-		{
-			for(int j=0;j<y;j++)
-			{
-				res.setRGB(i, j, in.getRGB(i/s, j/s));
+		for (int i = 0; i < x; i++) {
+			for (int j = 0; j < y; j++) {
+				res.setRGB(i, j, in.getRGB(i / s, j / s));
 			}
 		}
 		return res;
 	}
+
 	public static BufferedImage imgiv(BufferedImage in) {
 		int x = in.getWidth();
 		int y = in.getHeight();
@@ -125,18 +129,11 @@ public class loc {
 		return res;
 	}
 
-	/**
-	 * chuyen mau sang xan
-	 * 
-	 * @param a
-	 * @return
-	 */
 	// static int[][] ttc = { {
-		// 0,0,-1,0,0},{0,-1,-2,-1,0},{-1,-2,16,-2,-1},{0,-1,-2,-1,0},{
-		// 0,0,-1,0,0}};
+	// 0,0,-1,0,0},{0,-1,-2,-1,0},{-1,-2,16,-2,-1},{0,-1,-2,-1,0},{
+	// 0,0,-1,0,0}};
 	static int graycolor(int a) {
 		int i = 0;
-		// int[] k = new int[5];
 		rbg l = new rbg(a);
 		i = (g * l.getG() + b * l.getB() + r * l.getR()) / color;
 		i = i & plag;
@@ -147,6 +144,7 @@ public class loc {
 		return i;
 
 	}
+
 	/**
 	 * cong tat ca
 	 */
@@ -156,14 +154,15 @@ public class loc {
 		int v = H.length;
 		for (int i = 0; i < v; i++) {
 			for (int j = 0; j < v; j++)
-				//if (H[i][j] > 0)
-					csl = csl + H[i][j];
+				// if (H[i][j] > 0)
+				csl = csl + H[i][j];
 		}
 		if (csl < 1)
 			csl = 1;
-		//System.out.println(csl);
+		// System.out.println(csl);
 		return csl;
 	}
+
 	/**
 	 * cong so duong
 	 */
@@ -177,13 +176,14 @@ public class loc {
 					csl = csl + H[i][j];
 		}
 		return csl;
-		//System.out.println(csl);
-		
+		// System.out.println(csl);
+
 	}
+
 	public static BufferedImage tc(BufferedImage in) {
 		// TODO Auto-generated method stub
 
-		return cv(in, ttc,ctc(ttc));
+		return cv(in, ttc, 8);//ctc(ttc));
 	}
 
 	/**
@@ -195,13 +195,13 @@ public class loc {
 	public static BufferedImage tb(BufferedImage in) {
 		// TODO Auto-generated method stub
 
-		return cv(in, ttb,ctc(ttb));
+		return cv(in, ttb, ctc(ttb));
 	}
 
 	public static BufferedImage hcb(BufferedImage in) {
 		// TODO Auto-generated method stub
 
-		return exb(in, cb,ctc(cb));
+		return exb(in, cb, ctc(cb));
 	}
 
 	/**
@@ -212,7 +212,13 @@ public class loc {
 	 */
 	public static BufferedImage tg(BufferedImage in) {
 		// TODO Auto-generated method stub
-		return cv(in, lgs,csd(lgs));
+		return cv(in, lgs, csd(lgs));
+	}
+
+	public static BufferedImage tgex(BufferedImage in, int k) {
+		// TODO Auto-generated method stub
+		int[][] res = Mgauss(k);
+		return cv(in, res, csd(res));
 	}
 
 	public static BufferedImage edge(BufferedImage in) {
@@ -234,11 +240,33 @@ public class loc {
 				if (a != b)
 					eg.setRGB(2 * i, 2 * j + 1, s);
 
-				
 			}
-			
+
 		}
 		return eg;
 	}
 
+	static double gauss(int a, int b) {
+		return Math.exp(-(a * a + b * b) / 2.0) / pi;
+	}
+
+	static int[][] Mgauss(int a) {
+		int v = 2 * a + 1;
+		double t = gauss(a, a);
+		int[][] res = new int[v][v];
+		for (int i = 0; i <= a; i++)
+			for (int j = i; j <= a; j++) {
+				double p = gauss(i, j);
+				int d = (int) (p / t + 0.5);
+				res[a + i][a + j] = d;
+				res[a - i][a + j] = d;
+				res[a + i][a - j] = d;
+				res[a - i][a - j] = d;
+				res[a + j][a + i] = d;
+				res[a - j][a + i] = d;
+				res[a + j][a - i] = d;
+				res[a - j][a - i] = d;
+			}
+		return res;
+	}
 }
