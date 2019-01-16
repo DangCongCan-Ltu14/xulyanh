@@ -22,8 +22,7 @@ public class loc {
 	static int color = r + b + g;
 	static int plag = -1;
 	static int[][] cb = { { 0, 1, 0 }, { 1, 1, 1 }, { 0, 1, 0 } };
-	static double o = 0.7;
-	static double pi = 2 * Math.PI * (o * o);
+
 
 	static protected BufferedImage cv(BufferedImage in, int[][] H, int sc) {
 		csl = sc;
@@ -215,12 +214,7 @@ public class loc {
 		return cv(in, lgs, csd(lgs));
 	}
 
-	public static BufferedImage tgex(BufferedImage in, int k) {
-		// TODO Auto-generated method stub
-		int[][] res = Mgauss(k);
-		return cv(in, res, csd(res));
-	}
-
+	
 	public static BufferedImage edge(BufferedImage in) {
 		// TODO Auto-generated method stub
 		int x = in.getWidth();
@@ -244,29 +238,5 @@ public class loc {
 
 		}
 		return eg;
-	}
-
-	static double gauss(int a, int b) {
-		return Math.exp(-(a * a + b * b) / 2.0) / pi;
-	}
-
-	static int[][] Mgauss(int a) {
-		int v = 2 * a + 1;
-		double t = gauss(a, a);
-		int[][] res = new int[v][v];
-		for (int i = 0; i <= a; i++)
-			for (int j = i; j <= a; j++) {
-				double p = gauss(i, j);
-				int d = (int) (p / t + 0.5);
-				res[a + i][a + j] = d;
-				res[a - i][a + j] = d;
-				res[a + i][a - j] = d;
-				res[a - i][a - j] = d;
-				res[a + j][a + i] = d;
-				res[a - j][a + i] = d;
-				res[a + j][a - i] = d;
-				res[a - j][a - i] = d;
-			}
-		return res;
-	}
+	}	
 }

@@ -10,9 +10,21 @@ public class t {
 
 	public static void main(String[] args) {
 		
-		pr(loc.Mgauss(4));
+		pr(loc2.Mgauss(4));
 	}
 	 static void pr(int[][] stn) {
+			// TODO Auto-generated method stub
+			int a = stn.length;
+			int b = stn[0].length;
+			for (int i = 0; i < a; i++) {
+				for (int j = 0; j < b; j++)
+					System.out.print(stn[i][j] + " ");
+
+				System.out.println();
+			}
+
+		}
+	 static void pr(double[][] stn) {
 			// TODO Auto-generated method stub
 			int a = stn.length;
 			int b = stn[0].length;

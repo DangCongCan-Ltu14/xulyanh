@@ -2,6 +2,8 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
@@ -33,8 +35,9 @@ import segment.bina;
 import segment.imgs;
 import xla.buff;
 import xla.loc;
+import xla.loc2;
 
-public class tool extends JFrame implements ActionListener, WindowListener {
+public class tool extends JFrame implements ActionListener, WindowListener,KeyListener {
 	/**
 	 * @author amneiht
 	 *
@@ -73,7 +76,7 @@ public class tool extends JFrame implements ActionListener, WindowListener {
 		// setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		bar2 = new JScrollBar();
-
+		
 		bar1 = new JScrollBar();
 		bar1.setOrientation(JScrollBar.HORIZONTAL);
 
@@ -183,7 +186,7 @@ public class tool extends JFrame implements ActionListener, WindowListener {
 	}
 
 	private void addac() {
-
+		addKeyListener(this);
 		segment.addActionListener(this);
 		Open.addActionListener(this);
 		LocGauss.addActionListener(this);
@@ -230,7 +233,7 @@ public class tool extends JFrame implements ActionListener, WindowListener {
 			doOpen();
 		} else if (e.getSource() == Save) {
 			JFileChooser chooser = new JFileChooser();
-			chooser.setCurrentDirectory(new java.io.File("."));
+			chooser.setCurrentDirectory(new java.io.File("/home/amneiht/Desktop"));
 			chooser.setDialogTitle("choosertitle");
 			chooser.setFileFilter(new sjpg());
 			chooser.setFileFilter(new spng());
@@ -274,7 +277,7 @@ public class tool extends JFrame implements ActionListener, WindowListener {
 			if (s != null) {
 				int p = Integer.parseInt(s);
 				if (d > 0) {
-					BufferedImage in = loc.tgex(his.get(d - 1), p);
+					BufferedImage in = loc2.tgex(his.get(d - 1), p);
 					addlist(in);
 				}
 			}
@@ -431,7 +434,7 @@ public class tool extends JFrame implements ActionListener, WindowListener {
 
 	private void doOpen() {
 		JFileChooser chooser = new JFileChooser();
-		chooser.setCurrentDirectory(new java.io.File("/amneiht"));
+		chooser.setCurrentDirectory(new java.io.File("/home/amneiht/Desktop"));
 		chooser.setDialogTitle("choosertitle");
 
 		chooser.setAcceptAllFileFilterUsed(false);
@@ -514,6 +517,25 @@ public class tool extends JFrame implements ActionListener, WindowListener {
 				popup.show(e.getComponent(), e.getX(), e.getY());
 			}
 		});
+	}
+
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+	
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		
+		if(e.getKeyChar()=='z')
+			doctrlz();
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		
+		
 	}
 
 }
