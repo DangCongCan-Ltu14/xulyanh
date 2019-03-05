@@ -1,4 +1,4 @@
-package potrace;
+package pv3;
 
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
@@ -7,23 +7,24 @@ import java.util.List;
 import base.point;
 import base.svg.img;
 import base.svg.poly;
+import pv3.stack;
 
 /**
  * @author amneiht
  *
  */
 public class vector {
-	static final double str = Double.MAX_VALUE;
 	int x, y;
-	public int[][] img;
-	static final int black = 0;//Color.black.getRGB();// mau nen
+	public int[][] img, sou;
+	static final int black = 0;// Color.black.getRGB();// mau nen
 	static final int trai = 1, phai = 0b10, tren = 0b100, duoi = 0b1000, trong = 0, ngoai = 0;
-	public int dem = 0;
+	// public int dem = 0;
 
 	public vector(BufferedImage in, int p) {
 		x = in.getWidth() + 2;
 		y = in.getHeight() + 2;
 		img = new int[x][y];
+		sou = new int[x][y];
 		tdt(in);
 		creline.setHalf(p);
 	}
@@ -31,6 +32,7 @@ public class vector {
 	public vector(int[][] in) {
 		x = in.length + 2;
 		y = in[0].length + 2;
+		sou = new int[x][y];
 		img = new int[x][y];
 		tdt(in);
 	}
@@ -39,6 +41,7 @@ public class vector {
 		for (int i = 1; i < x - 1; i++) {
 			for (int j = 1; j < y - 1; j++) {
 				img[i][j] = in.getRGB(i - 1, j - 1);
+				sou[i][j] = in.getRGB(i - 1, j - 1);
 			}
 		}
 	}
@@ -48,19 +51,43 @@ public class vector {
 		for (int i = 1; i < x - 1; i++) {
 			for (int j = 1; j < y - 1; j++) {
 				img[i][j] = in[i - 1][j - 1];
+				sou[i][j] = in[i - 1][j - 1];
 			}
 		}
 	}
 
+	public img creat() {
+		// int dem = 0;
+		System.gc();
+		img sr = new img(x - 2, y - 2);
+		for (int i = 0; i < x - 1; i++) {
+			for (int j = 0; j < y - 1; j++) {
+				point a = new point(i, j);
+				int color = img[i + 1][j + 1];
+				int turn = check(a);
+				if (turn > 0) {
+					sr.add(new poly(color, getedge(a, color, turn)));
+					clear(i + 1, j + 1, color);
+				}
+			}
+		}
+		return sr;
+	}
+
+	private boolean sp;
+
 	public List<point> getedge(point a, int color, int t) {
-		List<point> p = new LinkedList<point>();
+		path p = new path();
 		p.add(a);
 		int turn = t;
 		int site = 0;
 		int x = a.getx(), y = a.gety();
 		do {
+			sp = false;
 			turn = nextedge(p.get(site), color, turn);
 			// if(turn==0 )System.out.println("aa");
+			if (sp)
+				p.note();
 			switch (turn) {
 			case trai:
 				y = y - 1;
@@ -76,17 +103,40 @@ public class vector {
 				break;
 			case duoi:
 				x = x + 1;
-				// System.out.println("duoi");
 				break;
+			default:
+				System.out.println("dkmcmn");
 			}
 			p.add(new point(x, y));
 			site++;
 		} while (end(p, site));
-		return taoPart2(p);
-		// return p;
+
+		return makep(p);
+		// return cong.taoPart(p.getp());
 	}
 
-	protected boolean end(List<point> p, int site) {
+	private List<point> makep(path p) {
+		// TODO Auto-generated method stub
+		int dau = p.getf();
+		if (p.vtsize()<1) {
+			return cong.taoPart2(p.getp());
+		}
+		if (p.vtsize()<2) {
+			return cong.creatp(p);
+		}
+		int cuoi = p.getf();
+		List<point> res = new LinkedList<point>();
+		res.add(p.get(dau));
+		while (cuoi != -1) {
+			cong.ntaopart(res, p, dau, cuoi);
+			dau = cuoi;
+			cuoi = p.getf();
+		}
+		//if(res.size()<10) System.out.println("xcmn");
+		return res;
+	}
+
+	protected boolean end(path p, int site) {
 		int a = p.get(0).getx() - p.get(site).getx();
 		int b = p.get(0).gety() - p.get(site).gety();
 		return (a != 0 || b != 0);
@@ -121,57 +171,64 @@ public class vector {
 		}
 	}
 
-	public img creat() {
-		// int dem = 0;
-		img sr = new img(x-2, y-2);
-		for (int i = 0; i < x - 1; i++) {
-			for (int j = 0; j < y - 1; j++) {
-				point a = new point(i, j);
-				int color = img[i + 1][j + 1];
-				int turn = check(a);
-				if (turn > 0) {
-System.out.println("dkdk");
-					sr.add(new poly(color, getedge(a, color, turn)));
-					clear(i + 1, j + 1, color);
-				}
-			}
-		}
-		return sr;
-	}
-
 	int check(point a) {
-		if (img[a.getx() + 1][a.gety() + 1] != black&&img[a.getx() + 1][a.gety() + 1]!=0)
+		if (img[a.getx() + 1][a.gety() + 1] != black && img[a.getx() + 1][a.gety() + 1] != 0)
 			return trai;
 		return 0;
 	}
 
 	protected int nextedge(point a, int color, int turn) {
 		int k = 0;
+		int d1, d2, d3, d4;
+		d1 = sou[a.getx()][a.gety()];
+		d2 = sou[a.getx()][a.gety() + 1];
+		d3 = sou[a.getx() + 1][a.gety() + 1];
+		d4 = sou[a.getx() + 1][a.gety()];// co the cai thien
 
-		if (img[a.getx()][a.gety()] == color)
+		if (d1 == color)
 			k = k | 0b1000;
 
-		if (img[a.getx()][a.gety() + 1] == color)
+		if (d2 == color)
 			k = k | 0b100;
 
-		if (img[a.getx() + 1][a.gety() + 1] == color)
+		if (d3 == color)
 			k = k | 0b10;
 
-		if (img[a.getx() + 1][a.gety()] == color)
+		if (d4 == color)
 			k = k | 0b1;
 
+		// System.out.println(sp);
 		switch (k) {
 
 		case 0b1001:
+			if (d2 != d3)
+				sp = true;
+			if (turn != tren && turn != duoi)
+				return 0;
+			k = turn;
+			break;
 		case 0b0110:
+			// System.out.println("0b0110");
+			if (d1 != d4)
+				sp = true;
 			if (turn != tren && turn != duoi)
 				return 0;
 			k = turn;
 			break;
 		case 0b1100:
-		case 0b0011:
+			if (d3 != d4)
+				sp = true;
 			if (turn != trai && turn != phai)
 				return 0;
+			k = turn;
+
+			break;
+		case 0b0011:
+			if (d1 != d2)
+				sp = true;
+			if (turn != trai && turn != phai)
+				return 0;
+
 			k = turn;
 			break;
 		case 0:
@@ -179,6 +236,15 @@ System.out.println("dkdk");
 			k = 0;
 			break;
 		case 0b0001:
+			if (d1 != d2 || d2 != d3)
+				sp = true;
+			if (turn == phai)
+				k = duoi;
+			else if (turn == tren)
+				k = trai;
+			else
+				return 0;
+			break;
 		case 0b1110:
 			if (turn == phai)
 				k = duoi;
@@ -188,6 +254,13 @@ System.out.println("dkdk");
 				return 0;
 			break;
 		case 0b0010:
+			if (d1 != d2 || d2 != d4)
+				sp = true;
+			if (turn == trai)
+				k = duoi;
+			else if (turn == tren)
+				k = phai;
+			break;
 		case 0b1101:
 			if (turn == trai)
 				k = duoi;
@@ -195,6 +268,15 @@ System.out.println("dkdk");
 				k = phai;
 			break;
 		case 0b0100:
+			if (d1 != d3 || d3 != d4)
+				sp = true;
+			if (turn == duoi)
+				k = phai;
+			else if (turn == trai)
+				k = tren;
+			else
+				return 0;
+			break;
 		case 0b1011:
 			if (turn == duoi)
 				k = phai;
@@ -204,6 +286,15 @@ System.out.println("dkdk");
 				return 0;
 			break;
 		case 0b1000:
+			if (d2 != d3 || d3 != d4)
+				sp = true;
+			if (turn == duoi)
+				k = trai;
+			else if (turn == phai)
+				k = tren;
+			else
+				return 0;
+			break;
 		case 0b0111:
 			if (turn == duoi)
 				k = trai;
@@ -213,6 +304,7 @@ System.out.println("dkdk");
 				return 0;
 			break;
 		case 0b1010:
+			sp = true;
 			switch (turn) {
 			case trai:
 				k = duoi;
@@ -229,6 +321,7 @@ System.out.println("dkdk");
 			}
 			break;
 		case 0b0101:
+			sp = true;
 			switch (turn) {
 			case trai:
 				k = tren;
@@ -248,20 +341,6 @@ System.out.println("dkdk");
 		return k;
 	}
 
-	static boolean change(double[] a, double[] b) {
-		if (b[0] < a[1])
-			return false;
-		if (b[1] > a[0])
-			return false;
-		if (b[0] < a[0]) {
-			a[0] = b[0];
-		}
-		if (b[1] >= a[1]) {
-			a[1] = b[1];
-		}
-		return true;
-	}
-
 	public int[][] getimg() {
 		// TODO Auto-generated method stub
 		int[][] res = new int[x - 2][y - 2];
@@ -273,96 +352,4 @@ System.out.println("dkdk");
 		return res;
 	}
 
-	public static List<point> taoPart(List<point> p) {
-		List<point> part = new LinkedList<point>();
-		point stack = p.get(0);
-		int i = 1;
-		double[] res = new double[2];
-		res[1] = -str;
-		res[0] = str;
-		int k = p.size() - 1;
-
-		for (i = 1; i < k; i++) {
-
-			double[] sd = creline.region(stack, p.get(i));
-			boolean tl = change(res, sd);
-
-			if (!tl) {
-
-				part.add(p.get(i - 1));
-				stack = p.get(i - 1);
-
-				res[1] = -str;
-				res[0] = str;
-				i = i - 1;
-			}
-
-		}
-		part.add(p.get(k));
-		return part;
-	}
-
-	public static List<point> taoPart2(List<point> p) {
-		List<point> part = new LinkedList<point>();
-		int dx = 0, dy = 0;
-		int i = 0;
-		int a, b;
-		boolean con = true;
-
-		double[] res = new double[2];
-		boolean tl = false;
-		res[1] = -str;
-		res[0] = str;
-		int k = p.size() - 1;
-		point stack = p.get(0);
-		for (i = 0; i < k; i++) {
-			a = p.get(i + 1).getx() - p.get(i).getx();
-			b = p.get(i + 1).getx() - p.get(i).getx();
-
-			if (a != 0) {
-				if (dx == 0)
-					dx = a;
-				else
-					con = (dx == a) && con;
-			}
-			if (b != 0) {
-				if (dy == 0)
-					dy = b;
-				else
-					con = (dx == b) && con;
-			}
-
-			double[] sd = creline.region(stack, p.get(i));
-			tl = change(res, sd);
-
-			if ((!tl) || (!con)) {
-				con = true;
-				part.add(p.get(i - 1));
-				stack = p.get(i - 1);
-				dx = 0;
-				dy = 0;
-				res[1] = -str;
-				res[0] = str;
-				i = i - 1;
-			}
-
-		}
-
-		part.add(p.get(k));
-		return part;
-	}
-
-	public static List<point> taoPart1(List<point> p) {
-		int dis = 1;
-		int ls = 4;
-		List<point> path = new LinkedList<point>();
-		int s = p.size();
-		path.add(p.get(0));
-		for (int i = 1; i < s; i = i + dis) {
-			if ((p.get(i).getx() % ls == 0) || (p.get(i).gety() % ls == 0))
-				path.add(p.get(i));
-		}
-		path.add(p.get(s - 1));
-		return path;
-	}
 }

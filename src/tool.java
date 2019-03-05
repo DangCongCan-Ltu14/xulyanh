@@ -30,7 +30,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 import base.svg.img;
 import file.sjpg;
 import file.spng;
-import potrace.vector;
+//import potrace.vector;
+import pv3.vector;
 import segment.bina;
 import segment.imgs;
 import xla.buff;
@@ -322,7 +323,7 @@ public class tool extends JFrame implements ActionListener, WindowListener,KeyLi
 		if (d > 0) {
 			//System.out.println("dosave");
 			JFileChooser chooser = new JFileChooser();
-			chooser.setCurrentDirectory(new java.io.File("."));
+			chooser.setCurrentDirectory(new java.io.File("/home/amneiht/Desktop/anh"));
 			chooser.setDialogTitle("choosertitle");
 			chooser.setFileFilter(new sjpg());
 			chooser.setFileFilter(new spng());
@@ -434,7 +435,7 @@ public class tool extends JFrame implements ActionListener, WindowListener,KeyLi
 
 	private void doOpen() {
 		JFileChooser chooser = new JFileChooser();
-		chooser.setCurrentDirectory(new java.io.File("/home/amneiht/Desktop"));
+		chooser.setCurrentDirectory(new java.io.File("/home/amneiht/Desktop/anh"));
 		chooser.setDialogTitle("choosertitle");
 
 		chooser.setAcceptAllFileFilterUsed(false);
