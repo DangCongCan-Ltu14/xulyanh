@@ -24,7 +24,11 @@ public class rbg {
 		add(sl);
 
 	}
+	public rbg() {
 
+		add(0);
+
+	}
 	public rbg(int la, int lr, int lb, int lg) {
 
 		a = la;
@@ -44,14 +48,24 @@ public class rbg {
 
 	public void reset() {
 		// TODO Auto-generated method stub
-		a = 0;
+		a = 255;
 		r = 0;
 		g = 0;
 		b = 0;
 	}
-
-	protected void add(int sl) {
-		a = a + ((sl & 0xff000000) >> 24);
+	public int tds(int s)
+	{
+		r=(r+s);
+		g=(g+s);
+		b=(b+s);
+		if(r>255) r=255;
+		if(b>255) b=255;
+		if(g>255) g=255;
+		return get();
+	}
+	public void add(int sl) {
+		//a = a + ((sl & 0xff000000) >> 24);
+		a=255;
 		r = r + ((sl & 0xff0000) >> 16);
 		b = b + ((sl & 0xff00) >> 8);
 		g = g + (sl & 0xff);
@@ -59,7 +73,7 @@ public class rbg {
 	}
 
 	public void add(int sl, int k) {
-		a = a + ((sl & 0xff000000) >> 24) * k;
+		//a = a + ((sl & 0xff000000) >> 24) * k;
 		r = r + ((sl & 0xff0000) >> 16) * k;
 		b = b + ((sl & 0xff00) >> 8) * k;
 		g = g + (sl & 0xff) * k;
@@ -69,7 +83,8 @@ public class rbg {
 	public int div(int d) {
 		if (d == 0)
 			return get();
-		a = a / d;
+		//a = a / d;
+		a=255;
 		b = b / d;
 		r = r / d;
 		g = g / d;

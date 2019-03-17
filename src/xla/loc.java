@@ -6,13 +6,7 @@ import java.awt.image.BufferedImage;
 import base.rbg;
 
 public class loc {
-
-	// static int[][] ttc = { { -1, -2, -1 },
-	// { -2, 19, -2 },
-	// { -1, -2, -1 } };
-	// static int[][] lgs = { { 2, 4, 5, 4, 2 }, { 4, 9, 12, 9, 4 }, { 5, 12, 15,
-	// 12, 5 }, { 4, 9, 12, 9, 4 },
-	// { 2, 4, 5, 4, 2 } };
+	;
 	static int[][] ttc = { { 1, 1, 1 }, { 1, -8, 1 }, { 1, 1, 1 } };
 	static int[][] lgs = { { 1, 4, 7, 4, 1 }, { 4, 16, 26, 16, 4 }, { 7, 26, 41, 26, 7 }, { 4, 16, 26, 16, 4 },
 			{ 1, 4, 7, 4, 1 } };
@@ -22,7 +16,6 @@ public class loc {
 	static int color = r + b + g;
 	static int plag = -1;
 	static int[][] cb = { { 0, 1, 0 }, { 1, 1, 1 }, { 0, 1, 0 } };
-
 
 	static protected BufferedImage cv(BufferedImage in, int[][] H, int sc) {
 		csl = sc;
@@ -79,6 +72,20 @@ public class loc {
 					res.setRGB(i, j, bl);
 				} else
 					res.setRGB(i, j, k);
+			}
+		}
+		return res;
+	}
+
+	static public BufferedImage tds( BufferedImage in)
+	
+	{int s=10;
+		int x = in.getWidth() ;
+		int y = in.getHeight() ;
+		BufferedImage res = new BufferedImage(x, y, BufferedImage.TYPE_INT_RGB);
+		for (int i = 0; i < x; i++) {
+			for (int j = 0; j < y; j++) {
+				res.setRGB(i, j, new rbg(in.getRGB(i , j )).tds(s));
 			}
 		}
 		return res;
@@ -182,7 +189,7 @@ public class loc {
 	public static BufferedImage tc(BufferedImage in) {
 		// TODO Auto-generated method stub
 
-		return cv(in, ttc, 8);//ctc(ttc));
+		return cv(in, ttc, 8);// ctc(ttc));
 	}
 
 	/**
@@ -214,7 +221,6 @@ public class loc {
 		return cv(in, lgs, csd(lgs));
 	}
 
-	
 	public static BufferedImage edge(BufferedImage in) {
 		// TODO Auto-generated method stub
 		int x = in.getWidth();
@@ -238,5 +244,5 @@ public class loc {
 
 		}
 		return eg;
-	}	
+	}
 }

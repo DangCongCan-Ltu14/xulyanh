@@ -5,7 +5,7 @@ import java.util.List;
 
 import base.point;
 
-public class stack {
+ class stack {
 	List<point> p = new LinkedList<point>();
 
 	protected void push(point pl) {

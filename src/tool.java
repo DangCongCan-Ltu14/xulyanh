@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
@@ -17,6 +18,7 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -31,14 +33,15 @@ import base.svg.img;
 import file.sjpg;
 import file.spng;
 //import potrace.vector;
+import pv3.ltv;
 import pv3.vector;
+import segment.Img2;
 import segment.bina;
-import segment.imgs;
 import xla.buff;
 import xla.loc;
 import xla.loc2;
 
-public class tool extends JFrame implements ActionListener, WindowListener,KeyListener {
+public class tool extends JFrame implements ActionListener, WindowListener, KeyListener,MouseMotionListener {
 	/**
 	 * @author amneiht
 	 *
@@ -63,7 +66,7 @@ public class tool extends JFrame implements ActionListener, WindowListener,KeyLi
 	List<BufferedImage> his = new LinkedList<BufferedImage>();
 	int x = 0, y = 0;
 	img is = null;
-
+	JLabel lblTd;
 	private JMenu Potrace;
 	private JMenuItem Vector;
 	private JMenuItem KhoiPhuc;
@@ -71,13 +74,15 @@ public class tool extends JFrame implements ActionListener, WindowListener,KeyLi
 	private JMenuItem Binary;
 	private JMenuItem Svg;
 	private JMenuItem gauss2;
+	private JMenuItem mntmTach;
+	private JMenuItem mntmltv;
 
 	public tool() {
 		this.addWindowListener(this);
 		// setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		bar2 = new JScrollBar();
-		
+
 		bar1 = new JScrollBar();
 		bar1.setOrientation(JScrollBar.HORIZONTAL);
 
@@ -89,17 +94,30 @@ public class tool extends JFrame implements ActionListener, WindowListener,KeyLi
 
 		gray = new JMenuItem("gray");
 		popupMenu.add(gray);
+		
+		 lblTd = new JLabel("td");
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
-		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
-						.addComponent(bar1, GroupLayout.DEFAULT_SIZE, 417, Short.MAX_VALUE)
-						.addPreferredGap(ComponentPlacement.RELATED).addComponent(bar2, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)));
-		groupLayout.setVerticalGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addComponent(bar1, GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(lblTd)))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(bar2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
-						.addComponent(bar2, GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE).addContainerGap())
-				.addGroup(groupLayout.createSequentialGroup().addContainerGap(443, Short.MAX_VALUE).addComponent(bar1,
-						GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)));
+					.addComponent(bar2, GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+					.addContainerGap())
+				.addGroup(groupLayout.createSequentialGroup()
+					.addComponent(lblTd)
+					.addPreferredGap(ComponentPlacement.RELATED, 220, Short.MAX_VALUE)
+					.addComponent(bar1, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
+		);
 		getContentPane().setLayout(groupLayout);
 
 		menuBar = new JMenuBar();
@@ -131,12 +149,15 @@ public class tool extends JFrame implements ActionListener, WindowListener,KeyLi
 
 		LocGauss = new JMenuItem("loc gauss");
 		Loc.add(LocGauss);
-		
+
 		gauss2 = new JMenuItem("loc gauss 2");
 		Loc.add(gauss2);
 
 		LocTrungBinh = new JMenuItem("loc trung binh");
 		Loc.add(LocTrungBinh);
+
+		mntmltv = new JMenuItem("loc trung vi");
+		Loc.add(mntmltv);
 
 		LocLaplace = new JMenuItem("loc  laplace");
 		Loc.add(LocLaplace);
@@ -146,6 +167,9 @@ public class tool extends JFrame implements ActionListener, WindowListener,KeyLi
 
 		Binary = new JMenuItem("binary");
 		mnEdit.add(Binary);
+
+		mntmTach = new JMenuItem("tach");
+		mnEdit.add(mntmTach);
 
 		Potrace = new JMenu("potrace");
 		mnEdit.add(Potrace);
@@ -188,6 +212,7 @@ public class tool extends JFrame implements ActionListener, WindowListener,KeyLi
 
 	private void addac() {
 		addKeyListener(this);
+		addMouseMotionListener(this);
 		segment.addActionListener(this);
 		Open.addActionListener(this);
 		LocGauss.addActionListener(this);
@@ -203,6 +228,8 @@ public class tool extends JFrame implements ActionListener, WindowListener,KeyLi
 		Binary.addActionListener(this);
 		Svg.addActionListener(this);
 		gauss2.addActionListener(this);
+		mntmTach.addActionListener(this);
+		mntmltv.addActionListener(this);
 	}
 
 	/**
@@ -239,11 +266,11 @@ public class tool extends JFrame implements ActionListener, WindowListener,KeyLi
 			chooser.setFileFilter(new sjpg());
 			chooser.setFileFilter(new spng());
 			if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
-				//System.out.println("sss");
-			repaint();
+				// System.out.println("sss");
+				repaint();
 		} else if (e.getSource() == SaveAs) {
 			dosaveAs();
-		}else if (e.getSource() == LocLaplace) {
+		} else if (e.getSource() == LocLaplace) {
 			loLaplace();
 		} else if (e.getSource() == Invert) {
 			doinvert();
@@ -267,7 +294,43 @@ public class tool extends JFrame implements ActionListener, WindowListener,KeyLi
 			dolocg2();
 		} else if (e.getSource() == LocGauss) {
 			dogauss();
-		} 
+		} else if (e.getSource() == mntmTach) {
+			dotach();
+		} else if (e.getSource() == mntmltv) {
+			doltv();
+		}
+
+	}
+
+	private void doltv() {
+		int d = his.size();
+		try {
+
+			if (d > 0) {
+				BufferedImage in = ltv.tv(his.get(d - 1));
+				addlist(in);
+			}
+		} catch (Exception se) {
+			se.printStackTrace();
+
+		}
+		repaint();
+
+	}
+
+	private void dotach() {
+		int d = his.size();
+		try {
+
+			if (d > 0) {
+				BufferedImage in = loc.tds(his.get(d - 1));
+				addlist(in);
+			}
+		} catch (Exception se) {
+			se.printStackTrace();
+
+		}
+		repaint();
 
 	}
 
@@ -287,22 +350,22 @@ public class tool extends JFrame implements ActionListener, WindowListener,KeyLi
 
 		}
 		repaint();
-		
+
 	}
 
 	private void doSvg() {
 		if (is != null) {
 			int d = his.size();
 			if (d > 0) {
-				//System.out.println("dosave");
+				// System.out.println("dosave");
 				JFileChooser chooser = new JFileChooser();
 				chooser.setCurrentDirectory(new java.io.File("/amneiht/sdf"));
 				chooser.setDialogTitle("choosertitle");
 				if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
 					is.create(chooser.getSelectedFile().getPath());
 				}
-				//his.removeAll(his);
-				//is = null;
+				// his.removeAll(his);
+				// is = null;
 			}
 		}
 		repaint();
@@ -321,7 +384,7 @@ public class tool extends JFrame implements ActionListener, WindowListener,KeyLi
 	private void dosaveAs() {
 		int d = his.size();
 		if (d > 0) {
-			//System.out.println("dosave");
+			// System.out.println("dosave");
 			JFileChooser chooser = new JFileChooser();
 			chooser.setCurrentDirectory(new java.io.File("/home/amneiht/Desktop/anh"));
 			chooser.setDialogTitle("choosertitle");
@@ -332,8 +395,6 @@ public class tool extends JFrame implements ActionListener, WindowListener,KeyLi
 				String b = file.list.getex(chooser.getFileFilter().getDescription());
 				buff.save(his.get(d - 1), a, b);
 			}
-			//his.removeAll(his);
-			//is = null;
 		}
 		repaint();
 
@@ -411,7 +472,7 @@ public class tool extends JFrame implements ActionListener, WindowListener,KeyLi
 			if (s != null) {
 				int p = Integer.parseInt(s);
 				if (d > 0) {
-					BufferedImage in = new imgs(his.get(d - 1), p).segment();
+					BufferedImage in = new Img2(his.get(d - 1), p).segment();
 					addlist(in);
 				}
 			}
@@ -457,7 +518,7 @@ public class tool extends JFrame implements ActionListener, WindowListener,KeyLi
 	private void dogauss() {
 		int d = his.size();
 		if (d > 0) {
-		//	System.out.println("gause");
+			// System.out.println("gause");
 			BufferedImage in = loc.tg(his.get(d - 1));
 			addlist(in);
 		}
@@ -522,21 +583,32 @@ public class tool extends JFrame implements ActionListener, WindowListener,KeyLi
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-	
-		
+
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		
-		if(e.getKeyChar()=='z')
+
+		if (e.getKeyChar() == 'z')
 			doctrlz();
 	}
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		
+
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent arg0) {
+		// TODO Auto-generated method stub
 		
 	}
 
+	@Override
+	public void mouseMoved(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		int x=arg0.getX()-10;
+		int y=arg0.getY()-80;
+		lblTd.setText("x"+x+"y"+y);
+	}
 }

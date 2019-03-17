@@ -17,7 +17,7 @@ import cuver.catmull;
 public class img {
 	private int x, y;
 	static final String spe = File.separator;
-	public int dem=0;
+	public int dem = 0;
 
 	public img(int dx, int dy) {
 		x = dx;
@@ -30,10 +30,11 @@ public class img {
 		p.add(pd);
 		dem++;
 	}
-	public poly getpl(int i)
-	{
+
+	public poly getpl(int i) {
 		return p.get(i);
 	}
+
 	public void create(String file) {
 		String cre = file + ".html";
 		FileWriter out;
@@ -53,35 +54,37 @@ public class img {
 
 	private void printl(FileWriter out) throws IOException {
 		// TODO Auto-generated method stub
-		//System.gc();
+		// System.gc();
+
 		for (poly d : p) {
 			List<point> ps = d.p;
-			point h = ps.get(0);
-			out.write("<path d=\" M " + h.getx() + " " + h.gety() + " ");
-			for (point k : ps) {
-				out.write(String.format("L %d %d ", k.getx(), k.gety()));
+			if (ps.size() > 0) {
+				point h = ps.get(0);
+				out.write("<path d=\" M " + h.getx() + " " + h.gety() + " ");
+				for (point k : ps) {
+					out.write(String.format("L %d %d ", k.getx(), k.gety()));
+				
 			}
 			out.write(String.format("Z \" fill=%s />\n", new rbg(d.getColor()).tohex()));
-
+			}
 		}
 		out.write("</svg>");
 	}
-	public void khoiphuc()
-	{
-		for(poly d:p)
-		{
-			d.p=catmull.tcat(d.p);
+
+	public void khoiphuc() {
+		for (poly d : p) {
+			d.p = catmull.tcat(d.p);
 		}
 	}
-	
+
 	public BufferedImage paintimg() {
 
 		BufferedImage res = new BufferedImage(x, y, BufferedImage.TYPE_INT_RGB);
 		Graphics g = res.getGraphics();
 		for (poly d : p) {
 			List<point> arr = d.p;
-		//	int s=arr.size();
-		//	if(s<5) System.out.println("loi"+d.getColor());
+			// int s=arr.size();
+			// if(s<5) System.out.println("loi"+d.getColor());
 			g.setColor(new Color(d.getColor()));
 			Polygon pl = new Polygon();
 			for (point i : arr) {

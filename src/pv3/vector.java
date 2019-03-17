@@ -7,7 +7,6 @@ import java.util.List;
 import base.point;
 import base.svg.img;
 import base.svg.poly;
-import pv3.stack;
 
 /**
  * @author amneiht
@@ -16,7 +15,7 @@ import pv3.stack;
 public class vector {
 	int x, y;
 	public int[][] img, sou;
-	static final int black = 0;// Color.black.getRGB();// mau nen
+	static final int black =0;//Color.black.getRGB();// mau nen
 	static final int trai = 1, phai = 0b10, tren = 0b100, duoi = 0b1000, trong = 0, ngoai = 0;
 	// public int dem = 0;
 
@@ -67,7 +66,7 @@ public class vector {
 				int turn = check(a);
 				if (turn > 0) {
 					sr.add(new poly(color, getedge(a, color, turn)));
-					clear(i + 1, j + 1, color);
+					clear(i + 1, j + 1,color);
 				}
 			}
 		}
@@ -110,18 +109,18 @@ public class vector {
 			p.add(new point(x, y));
 			site++;
 		} while (end(p, site));
-
 		return makep(p);
-		// return cong.taoPart(p.getp());
+	//	return cong.taoPart2(p.getp());
 	}
 
 	private List<point> makep(path p) {
 		// TODO Auto-generated method stub
 		int dau = p.getf();
-		if (p.vtsize()<1) {
+		if (p.vtsize() < 1) {
 			return cong.taoPart2(p.getp());
 		}
-		if (p.vtsize()<2) {
+		if (p.vtsize() < 2) {
+			// return cong.creatp(p);
 			return cong.creatp(p);
 		}
 		int cuoi = p.getf();
@@ -132,7 +131,7 @@ public class vector {
 			dau = cuoi;
 			cuoi = p.getf();
 		}
-		//if(res.size()<10) System.out.println("xcmn");
+		// if(res.size()<10) System.out.println("xcmn");
 		return res;
 	}
 
@@ -173,7 +172,7 @@ public class vector {
 
 	int check(point a) {
 		if (img[a.getx() + 1][a.gety() + 1] != black && img[a.getx() + 1][a.gety() + 1] != 0)
-			return trai;
+			return tren;
 		return 0;
 	}
 

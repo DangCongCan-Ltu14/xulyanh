@@ -130,7 +130,6 @@ public class vector {
 				int color = img[i + 1][j + 1];
 				int turn = check(a);
 				if (turn > 0) {
-System.out.println("dkdk");
 					sr.add(new poly(color, getedge(a, color, turn)));
 					clear(i + 1, j + 1, color);
 				}

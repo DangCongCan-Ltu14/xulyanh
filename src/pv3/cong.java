@@ -8,137 +8,159 @@ import base.point;
 public class cong {
 
 	static final double str = Double.MAX_VALUE;
-	static final int lg = 6;
+	static final int lg = 12;// bien so toi thieu
 
 	public static void ntaopart(List<point> ret, path p, int dau, int cuoi) {
 		double[] res = new double[2];
 		res[1] = -str;
 		res[0] = str;
-
 		int h = p.site();
 		int z = h - 1;
+		boolean bres = false;
 		point a = p.get(dau);
 		point b = p.get(cuoi);
+		int stack, node, dx = 0, dy = 0, da = 0, db = 0;
+		int k;
 		boolean tl;
 		if (point.cmpl(a, b)) {
-			// ret.add(p.get(dau));
+			stack = dau;
+			node = dau;
+
 			while (dau != cuoi) {
-				double[] sd = creline.region(a, p.get(dau));
-				tl = change(res, sd);
-				if (!tl) {
-					dau = (dau + z) % h;
-					ret.add(p.get(dau));
+				k = dau;
+				dau = (dau + 1) % h;
+				da = Math.abs(p.get(dau).getx() - p.get(k).getx());
+				db = Math.abs(p.get(dau).gety() - p.get(k).gety());
+				dx = dx + da;
+				dy = dy + db;
+				if (dx * dy != 0) {
+					if (dx > lg || dy > lg) {
+						bres = true;
+					} else {
+						node = k;
+						dx = da;
+						dy = db;
+					}
+				}
+				if (bres) {
+					if (node != stack)
+						ret.add(p.get(node));
+					ret.add(p.get(k));
+					stack = k;
+					node = k;
 					res[1] = -str;
 					res[0] = str;
-				} else
-					dau = (dau + 1) % h;
+					dx = da;
+					dy = db;
+					bres = false;
+				} else {
+					double[] sd = creline.region(a, p.get(dau));
+					tl = change(res, sd);
+					if (!tl) {
+						ret.add(p.get(k));
+						res[1] = -str;
+						res[0] = str;
+						a = p.get(k);
+						stack = k;
+					}
+				}
 			}
 
 			ret.add(p.get(cuoi));
 		} else {
 			int neo = ret.size();
 			ret.add(p.get(cuoi));
-
+			stack = cuoi;
+			node = cuoi;
 			while (cuoi != dau) {
-
+				k = cuoi;
+				cuoi = (cuoi + z) % h;
+				da = Math.abs(p.get(cuoi).getx() - p.get(k).getx());
+				db = Math.abs(p.get(cuoi).gety() - p.get(k).gety());
+				dx = dx + da;
+				dy = dy + db;
+				if (dx * dy != 0) {
+					if (dx > lg || dy > lg) {
+						bres = true;
+					} else {
+						node = k;
+						dx = da;
+						dy = db;
+					}
+				}
+				if (bres) {
+					if (node != stack)
+						ret.add(neo,p.get(node));
+					ret.add(neo,p.get(k));
+					stack = k;
+					node = k;
+					res[1] = -str;
+					res[0] = str;
+					dx = da;
+					dy = db;
+					bres = false;
+				} 
 				double[] sd = creline.region(b, p.get(cuoi));
 				tl = change(res, sd);
 				if (!tl) {
-					cuoi = (cuoi + 1) % h;
-					ret.add(neo, p.get(cuoi));
+					ret.add(neo, p.get(k));
 					res[1] = -str;
 					res[0] = str;
-				} else
-					cuoi = (cuoi + z) % h;
+					b = p.get(k);
+				}
 			}
 		}
 
-	}
-
-	public static List<point> taoPart(List<point> p) {
-		List<point> part = new LinkedList<point>();
-		point stack = p.get(0);
-		int i = 1;
-		double[] res = new double[2];
-		res[1] = -str;
-		res[0] = str;
-		int k = p.size() - 1;
-
-		for (i = 1; i < k; i++) {
-
-			double[] sd = creline.region(stack, p.get(i));
-			boolean tl = change(res, sd);
-
-			if (!tl) {
-
-				part.add(p.get(i - 1));
-				stack = p.get(i - 1);
-
-				res[1] = -str;
-				res[0] = str;
-				i = i - 1;
-			}
-
-		}
-		part.add(p.get(k));
-		return part;
 	}
 
 	public static List<point> taoPart2(List<point> p) {
 		List<point> part = new LinkedList<point>();
-		if (p.size() == 0)
+		if (p.size() < 1)
 			return part;
-		int dx = 0, dy = 0;
-		int i = 0;
-		boolean a = false, b = false;
-		boolean con = true;// contince
-		boolean bres = false;
+		int dx = 0, dy = 0, a, b;
+		boolean tl, bres = false;
+		int stack = 0, node = 0;
+		int k = p.size() - 1;
+		part.add(p.get(0));
 		double[] res = new double[2];
-		boolean tl = false;
 		res[1] = -str;
 		res[0] = str;
-		int k = p.size() - 1;
-		point stack = p.get(0);
-		int dem = 0;
-		for (i = 0; i < k; i++) {
-			if (con) {
-				if (dem < lg) {
-					dx = dx + Math.abs(p.get(i + 1).getx() - p.get(i).getx());
-					dy = dy + Math.abs(p.get(i + 1).getx() - p.get(i).getx());
+		for (int i = 1; i < k; i++) {
+			a = Math.abs(p.get(i + 1).getx() - p.get(i).getx());
+			b = Math.abs(p.get(i + 1).gety() - p.get(i).gety());
+			dx = dx + a;
+			dy = dy + b;
+			if (dx * dy != 0) {
+				if (dx > lg || dy > lg) {
+					bres = true;
 				} else {
-					a = (dx == 0);
-					b = (dy == 0);
-					con = false;
+					node = i;
+					dx = a;
+					dy = b;
 				}
-			} else {
-				dx = (p.get(i + 1).getx() - p.get(i).getx());
-				dy = (p.get(i + 1).getx() - p.get(i).getx());
-				if (a && dx != 0)
-					bres = true;
-				if (b && dy != 0)
-					bres = true;
-
 			}
-			if (bres)
-				tl = false;
-			else {
-				double[] sd = creline.region(stack, p.get(i));
-				tl = change(res, sd);
-			}
-			if ((!tl)) {
-				con = true;
-				bres = false;
-				part.add(p.get(i - 1));
-				stack = p.get(i - 1);
-				dx = 0;
-				dy = 0;
+			if (bres) {
+				if (node != stack)
+					part.add(p.get(node));
+				part.add(p.get(i));
+				stack = i;
+				node = i;
 				res[1] = -str;
 				res[0] = str;
-				i = i - 1;
+				dx = a;
+				dy = b;
+				bres = false;
+			} else {
+				double[] sd = creline.region(p.get(stack), p.get(i + 1));
+				tl = change(res, sd);
+				if (!tl) {
+					res[1] = -str;
+					res[0] = str;
+					part.add(p.get(i));
+					stack = i;
+				}
 			}
-
 		}
-
 		part.add(p.get(k));
 		return part;
 	}

@@ -5,8 +5,8 @@ import java.util.Random;
 
 import base.rbg;
 
-public class imgs {
-	int max, min;
+public class Img {
+	int[] max, min;
 	int x, y;
 	int[][] mg;
 	int[][] last;
@@ -16,7 +16,7 @@ public class imgs {
 	Random rand = new Random();
 	int type;
 
-	public imgs(BufferedImage inl, int ks) {
+	public Img(BufferedImage inl, int ks) {
 		k = ks;
 		x = inl.getWidth();
 		y = inl.getHeight();
@@ -44,11 +44,13 @@ public class imgs {
 		}
 		return res;
 	}
-/**
- * tinh lai trong tam
- * @return
- */
-	
+
+	/**
+	 * tinh lai trong tam
+	 * 
+	 * @return
+	 */
+
 	boolean update() {
 
 		long[][] cos = new long[k][4];
@@ -105,39 +107,29 @@ public class imgs {
 	}
 
 	void tts(BufferedImage inl) {
-		max = Integer.MIN_VALUE;
-		min = Integer.MAX_VALUE;
-		// int h;
 		for (int i = 0; i < x; i++) {
 			for (int j = 0; j < y; j++) {
 				img[i][j] = inl.getRGB(i, j);
-
-				if (img[i][j] > max) {
-					max = img[i][j];
-				} else if (img[i][j] < min) {
-					min = img[i][j];
-				}
 			}
 		}
-		max = max - min;
+	
 	}
 
-//	void kt1() {
-//		for (int i = 0; i < k; i++) {
-//			cent[i] = rand();
-//		}
-//	}
+	// void kt1() {
+	// for (int i = 0; i < k; i++) {
+	// cent[i] = rand();
+	// }
+	// }
 
 	void kt() {
-		int[][] means = new int[k][4];
+		int[] means = new int[4];
+		Random rand = new Random();
+		means[0] = 255;
 		for (int i = 0; i < k; i++) {
-			Random rand = new Random();
-			means[i][0] = 255;
-			means[i][1] = (int) (rand.nextDouble() * 255);
-			means[i][2] = (int) (rand.nextDouble() * 255);
-			means[i][3] = (int) (rand.nextDouble() * 255);
-			cent[i] = new rbg(means[i]);
-//			cent[i] = new rbg(img[4][4]);
+			 means[1] = (int) (rand.nextDouble() * 255);
+			 means[2] = (int) (rand.nextDouble() * 255);
+			 means[3] = (int) (rand.nextDouble() * 255);
+			cent[i] = new rbg(means);
 		}
 	}
 
@@ -161,6 +153,7 @@ public class imgs {
 		b = ((x & 0xff00) >> 8) - y.getB();
 		c = (x & 0xff) - y.getG();
 		d = a * a + b * b + c * c;
+	//	d=Math.abs(a)+Math.abs(b)+Math.abs(c);
 		return d;
 	}
 }
