@@ -107,4 +107,12 @@ public class rbg {
 	public String tohex() {
 		return String.format("#%02x%02x%02x", r,b,g).toUpperCase();
 	}
+	public static int getGray(int sl)
+	{
+		int r,g,b;
+		r =  ((sl & 0xff0000) >> 16);
+		b =  ((sl & 0xff00) >> 8);
+		g =  (sl & 0xff);
+		return (r+g+b)/3;
+	}
 }

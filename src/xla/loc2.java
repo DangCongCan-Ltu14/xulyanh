@@ -13,7 +13,7 @@ public class loc2 {
 		double[][] res = new double[v][v];
 		for (int i = 0; i <= a; i++)
 			for (int j = i; j <= a; j++) {
-				double d = gauss(i, j);
+				double d = gauss(i, j,pi);
 				res[a + i][a + j] = d;
 				res[a - i][a + j] = d;
 				res[a + i][a - j] = d;
@@ -25,7 +25,7 @@ public class loc2 {
 			}
 		return res;
 	}
-	static double gauss(int a, int b) {
+	static double gauss(int a, int b,double pi) {
 		return Math.exp(-(a * a + b * b) / 2.0) / pi;
 	}
 	public static BufferedImage tgex(BufferedImage in, int k) {

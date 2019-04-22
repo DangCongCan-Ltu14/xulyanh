@@ -1,6 +1,8 @@
 package segment;
 
 import java.awt.image.BufferedImage;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 import base.rbg;
@@ -43,26 +45,28 @@ public class Img2 {
 		}
 		for (int i = 0; i < length; i++) {
 			if (mg[i][0] != 0) {
-				//System.out.println(mg[i][0]);
+				// System.out.println(mg[i][0]);
 				axn[i] = bm[i].div(mg[i][0]);
-			//	System.out.println(new rbg(axn[i]).getA());
+				// System.out.println(new rbg(axn[i]).getA());
 			}
 		}
 	}
 
 	public BufferedImage segment() {
-		BufferedImage res = new BufferedImage(x, y, type);
+
 		do {
 			read();
 		} while (update());
-		int h;
-
-		for (int i = 0; i < x; i++) {
-			for (int j = 0; j < y; j++) {
-				h = axthuan(dc.getRGB(i, j));
-				res.setRGB(i, j, cent[mg[h][1]].get());
-			}
-		}
+		BufferedImage res;
+//		res = new BufferedImage(x, y, type);
+//		int h;
+//		for (int i = 0; i < x; i++) {
+//			for (int j = 0; j < y; j++) {
+//				h = axthuan(dc.getRGB(i, j));
+//				res.setRGB(i, j, cent[mg[h][1]].get());
+//			}
+//		}
+		 res = new Img(dc, k, cent).segment();
 		return res;
 	}
 
@@ -127,13 +131,17 @@ public class Img2 {
 
 	void kt() {
 		int[] means = new int[4];
-		Random rand = new Random();
+		// Random rand = new Random();
 		means[0] = 255;
+		List<Integer> lp = new LinkedList<Integer>();
+		for (int i = length - 1; i > -1; i--) {
+			if (mg[i][0] != 0)
+				lp.add(axnguoc(i));
+		}
+		System.out.println("so mau" + lp.size());
+		int h = lp.size() / k;
 		for (int i = 0; i < k; i++) {
-			means[1] = (int) (rand.nextDouble() * 255);
-			means[2] = (int) (rand.nextDouble() * 255);
-			means[3] = (int) (rand.nextDouble() * 255);
-			cent[i] = new rbg(means);
+			cent[i] = new rbg(lp.get(h * i));
 		}
 	}
 
@@ -166,8 +174,8 @@ public class Img2 {
 	}
 
 	public int axnguoc(int a) {
-		// return ((a & 0xf) << 4) | ((a & 0xf0) << 8) | ((a & 0xf00) << 12);
+		//return ((a & 0xf) << 4) | ((a & 0xf0) << 8) | ((a & 0xf00) << 12);
 
-		return axn[a];
+		 return axn[a];
 	}
 }

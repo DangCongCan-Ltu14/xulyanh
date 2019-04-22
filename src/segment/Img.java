@@ -16,6 +16,17 @@ public class Img {
 	Random rand = new Random();
 	int type;
 
+	public Img(BufferedImage inl, int ks,rbg[] dent) {
+		k = ks;
+		x = inl.getWidth();
+		y = inl.getHeight();
+		mg = new int[x][y];
+		img = new int[x][y];
+		last = new int[x][y];
+		tts(inl);
+		cent=dent;
+		type = inl.getType();
+	}
 	public Img(BufferedImage inl, int ks) {
 		k = ks;
 		x = inl.getWidth();
@@ -28,7 +39,6 @@ public class Img {
 		kt();
 		type = inl.getType();
 	}
-
 	public BufferedImage segment() {
 		BufferedImage res = new BufferedImage(x, y, type);
 		do {

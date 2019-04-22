@@ -16,7 +16,7 @@ public class vector {
 	int x, y;
 	public int[][] img, sou;
 	static final int black =0;//Color.black.getRGB();// mau nen
-	static final int trai = 1, phai = 0b10, tren = 0b100, duoi = 0b1000, trong = 0, ngoai = 0;
+	static final int trai = 1, phai = 0b10, tren = 0b100, duoi = 0b1000;
 	// public int dem = 0;
 
 	public vector(BufferedImage in, int p) {
@@ -84,7 +84,6 @@ public class vector {
 		do {
 			sp = false;
 			turn = nextedge(p.get(site), color, turn);
-			// if(turn==0 )System.out.println("aa");
 			if (sp)
 				p.note();
 			switch (turn) {
@@ -103,14 +102,26 @@ public class vector {
 			case duoi:
 				x = x + 1;
 				break;
-			default:
-				System.out.println("dkmcmn");
 			}
 			p.add(new point(x, y));
 			site++;
 		} while (end(p, site));
+		//return grd(p);
 		return makep(p);
-	//	return cong.taoPart2(p.getp());
+		//return cong.taoPart2(p.getp());
+	}
+	
+	@SuppressWarnings("unused")
+	private List<point> grd(path p)
+	{
+		int l=5;
+		List<point>d=p.getp();
+		List<point>p2=new LinkedList<point>();
+		for(point t:d)
+		{
+			if(t.getx()%l==0||t.gety()%l==0) p2.add(t);
+		}
+		return p2;
 	}
 
 	private List<point> makep(path p) {
@@ -120,8 +131,8 @@ public class vector {
 			return cong.taoPart2(p.getp());
 		}
 		if (p.vtsize() < 2) {
-			// return cong.creatp(p);
-			return cong.creatp(p);
+			 return cong.creatp(p);
+			//return cong.creatp(p);
 		}
 		int cuoi = p.getf();
 		List<point> res = new LinkedList<point>();
@@ -171,8 +182,8 @@ public class vector {
 	}
 
 	int check(point a) {
-		if (img[a.getx() + 1][a.gety() + 1] != black && img[a.getx() + 1][a.gety() + 1] != 0)
-			return tren;
+		if (img[a.getx() + 1][a.gety() + 1] != black&&img[a.getx() + 1][a.gety() + 1]!=0)
+			return trai;
 		return 0;
 	}
 

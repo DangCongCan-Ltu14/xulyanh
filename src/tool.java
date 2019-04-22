@@ -33,15 +33,16 @@ import base.svg.img;
 import file.sjpg;
 import file.spng;
 //import potrace.vector;
-import pv3.ltv;
 import pv3.vector;
+import pv3.ltv;
+import segment.Img;
 import segment.Img2;
 import segment.bina;
 import xla.buff;
 import xla.loc;
 import xla.loc2;
 
-public class tool extends JFrame implements ActionListener, WindowListener, KeyListener,MouseMotionListener {
+public class tool extends JFrame implements ActionListener, WindowListener, KeyListener, MouseMotionListener {
 	/**
 	 * @author amneiht
 	 *
@@ -94,30 +95,22 @@ public class tool extends JFrame implements ActionListener, WindowListener, KeyL
 
 		gray = new JMenuItem("gray");
 		popupMenu.add(gray);
-		
-		 lblTd = new JLabel("td");
+
+		lblTd = new JLabel("td");
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
+		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(bar1, GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(lblTd)))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(bar2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+								.addComponent(bar1, GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
+								.addGroup(groupLayout.createSequentialGroup().addContainerGap().addComponent(lblTd)))
+						.addPreferredGap(ComponentPlacement.RELATED).addComponent(bar2, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)));
+		groupLayout.setVerticalGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addComponent(bar2, GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
-					.addContainerGap())
-				.addGroup(groupLayout.createSequentialGroup()
-					.addComponent(lblTd)
-					.addPreferredGap(ComponentPlacement.RELATED, 220, Short.MAX_VALUE)
-					.addComponent(bar1, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
-		);
+						.addComponent(bar2, GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE).addContainerGap())
+				.addGroup(groupLayout.createSequentialGroup().addComponent(lblTd)
+						.addPreferredGap(ComponentPlacement.RELATED, 220, Short.MAX_VALUE)
+						.addComponent(bar1, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)));
 		getContentPane().setLayout(groupLayout);
 
 		menuBar = new JMenuBar();
@@ -435,11 +428,13 @@ public class tool extends JFrame implements ActionListener, WindowListener, KeyL
 			int d = his.size();
 			int p = Integer.parseInt(s);
 			if (d > 0) {
+				if (p == 0)
+					p = 1;
 				is = new vector(his.get(d - 1), p).creat();
 				addlist(is.paintimg());
 			}
 		} catch (Exception se) {
-			se.printStackTrace();
+			System.out.println("loi nhap so");
 
 		}
 		repaint();
@@ -465,6 +460,7 @@ public class tool extends JFrame implements ActionListener, WindowListener, KeyL
 		repaint();
 	}
 
+	@SuppressWarnings("unused")
 	private void dosegment() {
 		String s = (String) JOptionPane.showInputDialog(this, "amneiht", "nhap so mau", JOptionPane.PLAIN_MESSAGE);
 		try {
@@ -472,6 +468,8 @@ public class tool extends JFrame implements ActionListener, WindowListener, KeyL
 			if (s != null) {
 				int p = Integer.parseInt(s);
 				if (d > 0) {
+					Img2 cmn;
+					Img xx;
 					BufferedImage in = new Img2(his.get(d - 1), p).segment();
 					addlist(in);
 				}
@@ -601,14 +599,14 @@ public class tool extends JFrame implements ActionListener, WindowListener, KeyL
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		int x=arg0.getX()-10;
-		int y=arg0.getY()-80;
-		lblTd.setText("x"+x+"y"+y);
+		int x = arg0.getX() - 10;
+		int y = arg0.getY() - 80;
+		lblTd.setText("x" + x + "y" + y);
 	}
 }

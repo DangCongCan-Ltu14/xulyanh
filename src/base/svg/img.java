@@ -58,7 +58,7 @@ public class img {
 
 		for (poly d : p) {
 			List<point> ps = d.p;
-			if (ps.size() > 0) {
+			if (ps.size() > 3) {
 				point h = ps.get(0);
 				out.write("<path d=\" M " + h.getx() + " " + h.gety() + " ");
 				for (point k : ps) {
