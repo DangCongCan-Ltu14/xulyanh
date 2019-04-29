@@ -9,7 +9,7 @@ import base.point;
 
 public class catmull {
 
-	void paintline(Graphics g,List<point> arr) {
+	public void paintline(Graphics g,List<point> arr) {
 		// Graphics g = getGraphics();
 		g.setColor(Color.GREEN);
 		point p = arr.get(0);
@@ -63,7 +63,8 @@ public class catmull {
 //		//System.out.println("done");
 //
 //	}
-	private static void dcat(List<point> brr, List<point> arr,int l) {
+	public static void dcat(List<point> brr, List<point> arr,int l) 
+	{
 		int p, k = arr.size();
 		int[][] cat = new int[4][2];// a,b,c,d
 		for (int i = 0; i < 4; i++) {
@@ -73,8 +74,42 @@ public class catmull {
 				cat[i][1] = cat[i][1] + arr.get(p).gety() * mcat[i][j];
 			}
 		}
-		
-		double t = 0.01;
+		int a=(l + 1 ) % k,b=(l+2)%k;
+		int h=(int)(Math.sqrt(Math.abs(arr.get(a).getx()-arr.get(b).getx())+Math.abs(arr.get(a).gety()-arr.get(b).gety()))+1);
+		double dt=1.0/h;
+		double t = dt;//.0/Math.sqrt(a);
+		double t3, t2;
+		int x0, y0, x1, y1;
+		p = (l + 1 ) % k;
+		x0 = arr.get(p).getx();
+		y0 = arr.get(p).gety();
+		while (t < 1) {
+			brr.add(new point(x0,y0));
+			t2 = t * t;
+			t3 = t2 * t;
+			x1 = (int) ((t3 * cat[0][0] + t2 * cat[1][0] + t * cat[2][0] + cat[3][0]) / 2+0.25);
+			y1 = (int) ((t3 * cat[0][1] + t2 * cat[1][1] + t * cat[2][1] + cat[3][1]) / 2+0.25);
+			x0 = x1;
+			y0 = y1;
+			t = t + dt;
+		}
+		brr.add(arr.get(b));
+
+	}
+	
+	@SuppressWarnings("unused")
+	private static void adcat(List<point> brr, List<point> arr,int l)// backup of dcat 
+	{
+		int p, k = arr.size();
+		int[][] cat = new int[4][2];// a,b,c,d
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				p = (l + j ) % k;
+				cat[i][0] = cat[i][0] + arr.get(p).getx() * mcat[i][j];
+				cat[i][1] = cat[i][1] + arr.get(p).gety() * mcat[i][j];
+			}
+		}
+		double t = 0.01;//.0/Math.sqrt(a);
 		double t3, t2;
 		int x0, y0, x1, y1;
 		p = (l + 1 ) % k;
@@ -84,8 +119,8 @@ public class catmull {
 			brr.add(new point(x0,y0));
 			t2 = t * t;
 			t3 = t2 * t;
-			x1 = (int) (t3 * cat[0][0] + t2 * cat[1][0] + t * cat[2][0] + cat[3][0]) / 2;
-			y1 = (int) (t3 * cat[0][1] + t2 * cat[1][1] + t * cat[2][1] + cat[3][1]) / 2;
+			x1 = (int) ((t3 * cat[0][0] + t2 * cat[1][0] + t * cat[2][0] + cat[3][0]) / 2+0.25);
+			y1 = (int) ((t3 * cat[0][1] + t2 * cat[1][1] + t * cat[2][1] + cat[3][1]) / 2+0.25);
 			x0 = x1;
 			y0 = y1;
 			t = t + 0.01;

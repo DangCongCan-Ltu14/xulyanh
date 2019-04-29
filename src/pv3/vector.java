@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import base.point;
+import base.stack;
 import base.svg.img;
 import base.svg.poly;
 
@@ -58,7 +59,7 @@ public class vector {
 	public img creat() {
 		// int dem = 0;
 		System.gc();
-		img sr = new img(x - 2, y - 2);
+		img sr = new img(x -2, y-2 );
 		for (int i = 0; i < x - 1; i++) {
 			for (int j = 0; j < y - 1; j++) {
 				point a = new point(i, j);

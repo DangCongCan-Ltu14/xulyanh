@@ -1,23 +1,21 @@
-package potrace;
+package base;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import base.point;
-
-public class stack {
+ public class stack {
 	List<point> p = new LinkedList<point>();
 
-	protected void push(point pl) {
+	public void push(point pl) {
 		p.add(pl);
 
 	}
 
-	protected point pop() {
+	public point pop() {
 		return p.remove(0);
 	}
 
-	protected boolean end() {
+	public boolean end() {
 		return p.isEmpty();
 	}
 

@@ -7,35 +7,56 @@ import java.util.Random;
 
 import base.rbg;
 
-public class Img2 {
+public class Kmean2 {
 	final int length = 4096;
 	int[][] mg = new int[length][2];
 	int[] last = new int[length];
 	int[] axn = new int[length];
 	int x, y;
+	private boolean test=false;
 	protected rbg[] cent;
 	int k = 1;
+	double ng = 0;
 	Random rand = new Random();
 	int type;
 	BufferedImage dc;
 
-	public Img2(BufferedImage inl, int ks) {
+	public int nocolor() {
+		int l = cent.length;
+		int[] p = new int[l];
+		for (int i = 0; i < l; i++) {
+			p[i] = cent[i].get();
+		}
+		boolean run = true;
+		int dem = (255 << 24) | ((int) (Math.random() * 1600000));
+		while (run) {
+			run = false;
+			for (int i = 0; i < l; i++) {
+				run = run | (p[i] == dem);
+				if (run)
+					break;
+			}
+			dem = (255 << 24) | (dem + 1);
+		}
+		return dem;
+	}
+
+	public Kmean2(BufferedImage inl, double ks) {
 		dc = inl;
-		k = ks;
 		x = inl.getWidth();
 		y = inl.getHeight();
+		ng = ks;
 		tts(inl);
-		cent = new rbg[k];
 		kt();
 		type = inl.getType();
 	}
 
 	void tts(BufferedImage inl) {
+		int a;
 		rbg[] bm = new rbg[length];
 		for (int i = 0; i < length; i++) {
 			bm[i] = new rbg();
 		}
-		int a;
 		for (int i = 0; i < x; i++) {
 			for (int j = 0; j < y; j++) {
 				a = axthuan(inl.getRGB(i, j));
@@ -45,10 +66,22 @@ public class Img2 {
 		}
 		for (int i = 0; i < length; i++) {
 			if (mg[i][0] != 0) {
-				// System.out.println(mg[i][0]);
 				axn[i] = bm[i].div(mg[i][0]);
-				// System.out.println(new rbg(axn[i]).getA());
 			}
+		}
+
+	}
+
+	void testts(BufferedImage inl) {
+		int a;
+		for (int i = 0; i < x; i++) {
+			for (int j = 0; j < y; j++) {
+				a = axthuan(inl.getRGB(i, j));
+				mg[a][0]++;
+			}
+		}
+		for (a = 0; a < length; a++) {
+			axn[a] = ((a & 0xf) << 4) | ((a & 0xf0) << 8) | ((a & 0xf00) << 12);
 		}
 	}
 
@@ -58,16 +91,45 @@ public class Img2 {
 			read();
 		} while (update());
 		BufferedImage res;
-//		res = new BufferedImage(x, y, type);
-//		int h;
-//		for (int i = 0; i < x; i++) {
-//			for (int j = 0; j < y; j++) {
-//				h = axthuan(dc.getRGB(i, j));
-//				res.setRGB(i, j, cent[mg[h][1]].get());
-//			}
-//		}
-		 res = new Img(dc, k, cent).segment();
+		if(!test)sts();
+		res = new BufferedImage(x, y, type);
+		int h;
+		for (int i = 0; i < x; i++) {
+			for (int j = 0; j < y; j++) {
+				h = axthuan(dc.getRGB(i, j));
+				res.setRGB(i, j, cent[mg[h][1]].get());
+			}
+		}
+		// res = new Kmean(dc, k, cent).segment();
 		return res;
+	}
+
+	private void sts() { // thiet lap lai cac tham so
+		// TODO Auto-generated method stub
+		int dem[] = new int[k];
+		long[] r = new long[k];
+		long[] b = new long[k];
+		long[] g = new long[k];
+		int d, p;
+		rbg col;
+		for (int i = 0; i < x; i++) {
+			for (int j = 0; j < y; j++) {
+				p = dc.getRGB(i, j);
+				d = mg[axthuan(p)][1];// lay tam mau
+				col = new rbg(p);
+				r[d] = r[d] + col.getR();
+				b[d] = b[d] + col.getB();
+				g[d] = g[d] + col.getG();
+				dem[d]++;
+			}
+		}
+		for (int i = 0; i < k; i++) {
+			r[i] = r[i] / dem[i];
+			b[i] = b[i] / dem[i];
+			g[i] = g[i] / dem[i];
+			cent[i] = new rbg(255, (int) r[i], (int) b[i], (int) g[i]);
+
+		}
 	}
 
 	private void read() {
@@ -132,13 +194,18 @@ public class Img2 {
 	void kt() {
 		int[] means = new int[4];
 		// Random rand = new Random();
+		int moc = (int) (Math.sqrt(ng * x * y));
 		means[0] = 255;
+		if(test)moc=0;
 		List<Integer> lp = new LinkedList<Integer>();
 		for (int i = length - 1; i > -1; i--) {
-			if (mg[i][0] != 0)
+			if (mg[i][0] > moc)
 				lp.add(axnguoc(i));
 		}
-		System.out.println("so mau" + lp.size());
+		k = lp.size();
+		if(test)k=(int)ng;
+		cent = new rbg[k];
+		System.out.println("so tam" + lp.size());
 		int h = lp.size() / k;
 		for (int i = 0; i < k; i++) {
 			cent[i] = new rbg(lp.get(h * i));
@@ -174,8 +241,6 @@ public class Img2 {
 	}
 
 	public int axnguoc(int a) {
-		//return ((a & 0xf) << 4) | ((a & 0xf0) << 8) | ((a & 0xf00) << 12);
-
-		 return axn[a];
+		return axn[a];
 	}
 }

@@ -5,7 +5,7 @@ import java.util.Random;
 
 import base.rbg;
 
-public class Img {
+public class Kmean {
 	int[] max, min;
 	int x, y;
 	int[][] mg;
@@ -16,7 +16,7 @@ public class Img {
 	Random rand = new Random();
 	int type;
 
-	public Img(BufferedImage inl, int ks,rbg[] dent) {
+	public Kmean(BufferedImage inl, int ks,rbg[] dent) {
 		k = ks;
 		x = inl.getWidth();
 		y = inl.getHeight();
@@ -27,7 +27,27 @@ public class Img {
 		cent=dent;
 		type = inl.getType();
 	}
-	public Img(BufferedImage inl, int ks) {
+
+	public int nocolor() {
+		int l = cent.length;
+		int[] p = new int[l];
+		for (int i = 0; i < l; i++) {
+			p[i] = cent[i].get();
+		}
+		boolean run = true;
+		int dem = (255 << 24) | ((int) (Math.random() * 1600000));
+		while (run) {
+			run = false;
+			for (int i = 0; i < l; i++) {
+				run = run | (p[i] == dem);
+				if (run)
+					break;
+			}
+			dem = (255 << 24) | (dem + 1);
+		}
+		return dem;
+	}
+	public Kmean(BufferedImage inl, int ks) {
 		k = ks;
 		x = inl.getWidth();
 		y = inl.getHeight();

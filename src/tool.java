@@ -2,13 +2,13 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -18,7 +18,6 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -30,19 +29,19 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import base.svg.img;
+import file.Fvt;
 import file.sjpg;
 import file.spng;
-//import potrace.vector;
-import pv3.vector;
 import pv3.ltv;
-import segment.Img;
-import segment.Img2;
+import pv3.vector;
+import segment.Kmean;
+import segment.Kmean2;
 import segment.bina;
 import xla.buff;
 import xla.loc;
 import xla.loc2;
 
-public class tool extends JFrame implements ActionListener, WindowListener, KeyListener, MouseMotionListener {
+public class tool extends JFrame implements ActionListener, KeyListener, AdjustmentListener {
 	/**
 	 * @author amneiht
 	 *
@@ -53,7 +52,6 @@ public class tool extends JFrame implements ActionListener, WindowListener, KeyL
 	private JMenu mnHelp;
 	private JMenuItem mntmInfo;
 	private JMenuItem Open;
-	private JMenuItem Save;
 	private JMenuItem Close;
 	private JScrollBar bar2;
 	private JScrollBar bar1;
@@ -65,9 +63,10 @@ public class tool extends JFrame implements ActionListener, WindowListener, KeyL
 	private JMenuItem LocLaplace;
 	private JMenuItem SaveAs;
 	List<BufferedImage> his = new LinkedList<BufferedImage>();
+	int dx = 0, dy = 0;
 	int x = 0, y = 0;
 	img is = null;
-	JLabel lblTd;
+	int nocolor;
 	private JMenu Potrace;
 	private JMenuItem Vector;
 	private JMenuItem KhoiPhuc;
@@ -77,40 +76,38 @@ public class tool extends JFrame implements ActionListener, WindowListener, KeyL
 	private JMenuItem gauss2;
 	private JMenuItem mntmTach;
 	private JMenuItem mntmltv;
+	// private Kmean2 sg;
+	private JMenu mnSegment;
+	private JMenuItem mntmSegment;
 
 	public tool() {
-		this.addWindowListener(this);
+
 		// setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		bar2 = new JScrollBar();
 
 		bar1 = new JScrollBar();
 		bar1.setOrientation(JScrollBar.HORIZONTAL);
-
+		setResizable(true);
 		JPopupMenu popupMenu = new JPopupMenu();
 		addPopup(getContentPane(), popupMenu);
-
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		Invert = new JMenuItem("invert");
 		popupMenu.add(Invert);
 
 		gray = new JMenuItem("gray");
 		popupMenu.add(gray);
-
-		lblTd = new JLabel("td");
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
-						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-								.addComponent(bar1, GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
-								.addGroup(groupLayout.createSequentialGroup().addContainerGap().addComponent(lblTd)))
+						.addComponent(bar1, GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
 						.addPreferredGap(ComponentPlacement.RELATED).addComponent(bar2, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)));
 		groupLayout.setVerticalGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
 						.addComponent(bar2, GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE).addContainerGap())
-				.addGroup(groupLayout.createSequentialGroup().addComponent(lblTd)
-						.addPreferredGap(ComponentPlacement.RELATED, 220, Short.MAX_VALUE)
-						.addComponent(bar1, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)));
+				.addGroup(groupLayout.createSequentialGroup().addContainerGap(235, Short.MAX_VALUE).addComponent(bar1,
+						GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)));
 		getContentPane().setLayout(groupLayout);
 
 		menuBar = new JMenuBar();
@@ -121,9 +118,6 @@ public class tool extends JFrame implements ActionListener, WindowListener, KeyL
 
 		Open = new JMenuItem("open");
 		File.add(Open);
-
-		Save = new JMenuItem("save");
-		File.add(Save);
 
 		SaveAs = new JMenuItem("save as");
 		File.add(SaveAs);
@@ -155,12 +149,6 @@ public class tool extends JFrame implements ActionListener, WindowListener, KeyL
 		LocLaplace = new JMenuItem("loc  laplace");
 		Loc.add(LocLaplace);
 
-		segment = new JMenuItem("segment");
-		mnEdit.add(segment);
-
-		Binary = new JMenuItem("binary");
-		mnEdit.add(Binary);
-
 		mntmTach = new JMenuItem("tach");
 		mnEdit.add(mntmTach);
 
@@ -176,6 +164,18 @@ public class tool extends JFrame implements ActionListener, WindowListener, KeyL
 		Redo = new JMenuItem("redo");
 		mnEdit.add(Redo);
 
+		mnSegment = new JMenu("segment");
+		menuBar.add(mnSegment);
+
+		segment = new JMenuItem("segment-1");
+		mnSegment.add(segment);
+
+		mntmSegment = new JMenuItem("segment-2");
+		mnSegment.add(mntmSegment);
+
+		Binary = new JMenuItem("binary");
+		mnSegment.add(Binary);
+
 		mnHelp = new JMenu("help");
 		menuBar.add(mnHelp);
 
@@ -183,35 +183,49 @@ public class tool extends JFrame implements ActionListener, WindowListener, KeyL
 		mnHelp.add(mntmInfo);
 
 		addac();
+		setbar();
+	}
+
+	private void setbar() {
+		bar1.addAdjustmentListener(this);
+		bar2.addAdjustmentListener(this);
+		bar1.setMaximum(100);
+		// bar1.setMinimum(2);
+		// bar1.setVisible(true);
+
+		bar2.setMaximum(100);
+		// bar2.setMinimum(2);
+		// bar2.setVisible(true);
 	}
 
 	public void paint(Graphics g) {
 		super.paint(g);
 		int d = his.size();
 		if (d > 0) {
-			int sx = 10, sy = 80;
+			int sx = 10, sy = 50;
 			BufferedImage in = his.get(d - 1);
 			int dx = getWidth() - sx - 20;
 			int dy = getHeight() - sy - 20;
 			int px = in.getWidth() - x;
 			int py = in.getHeight() - y;
-			if (px > dx)
+			if (px > dx) {
 				px = dx;
-			if (py > dy)
+			}
+			if (py > dy) {
 				py = dy;
+			}
 			g.drawImage(in, sx, sy, px + sx, py + sy, x, y, x + px, y + py, null);
 		}
 	}
 
 	private void addac() {
 		addKeyListener(this);
-		addMouseMotionListener(this);
+		// addMouseMotionListener(this);
 		segment.addActionListener(this);
 		Open.addActionListener(this);
 		LocGauss.addActionListener(this);
 		LocTrungBinh.addActionListener(this);
 		LocLaplace.addActionListener(this);
-		Save.addActionListener(this);
 		SaveAs.addActionListener(this);
 		gray.addActionListener(this);
 		Invert.addActionListener(this);
@@ -223,6 +237,8 @@ public class tool extends JFrame implements ActionListener, WindowListener, KeyL
 		gauss2.addActionListener(this);
 		mntmTach.addActionListener(this);
 		mntmltv.addActionListener(this);
+		mntmSegment.addActionListener(this);
+
 	}
 
 	/**
@@ -252,15 +268,15 @@ public class tool extends JFrame implements ActionListener, WindowListener, KeyL
 		// System.out.println("xcmn");
 		if (e.getSource() == Open) {
 			doOpen();
-		} else if (e.getSource() == Save) {
-			JFileChooser chooser = new JFileChooser();
-			chooser.setCurrentDirectory(new java.io.File("/home/amneiht/Desktop"));
-			chooser.setDialogTitle("choosertitle");
-			chooser.setFileFilter(new sjpg());
-			chooser.setFileFilter(new spng());
-			if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
-				// System.out.println("sss");
-				repaint();
+			// } else if (e.getSource() == Save) {
+			// JFileChooser chooser = new JFileChooser();
+			// chooser.setCurrentDirectory(new java.io.File("/home/amneiht/Desktop"));
+			// chooser.setDialogTitle("choosertitle");
+			// chooser.setFileFilter(new sjpg());
+			// chooser.setFileFilter(new spng());
+			// if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+			// // System.out.println("sss");
+			// repaint();
 		} else if (e.getSource() == SaveAs) {
 			dosaveAs();
 		} else if (e.getSource() == LocLaplace) {
@@ -291,6 +307,8 @@ public class tool extends JFrame implements ActionListener, WindowListener, KeyL
 			dotach();
 		} else if (e.getSource() == mntmltv) {
 			doltv();
+		} else if (e.getSource() == mntmSegment) {
+			dosegment2();
 		}
 
 	}
@@ -375,19 +393,29 @@ public class tool extends JFrame implements ActionListener, WindowListener, KeyL
 	}
 
 	private void dosaveAs() {
-		int d = his.size();
-		if (d > 0) {
-			// System.out.println("dosave");
-			JFileChooser chooser = new JFileChooser();
-			chooser.setCurrentDirectory(new java.io.File("/home/amneiht/Desktop/anh"));
-			chooser.setDialogTitle("choosertitle");
-			chooser.setFileFilter(new sjpg());
-			chooser.setFileFilter(new spng());
-			if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-				String a = chooser.getSelectedFile().getPath();
-				String b = file.list.getex(chooser.getFileFilter().getDescription());
-				buff.save(his.get(d - 1), a, b);
+		try {
+			int d = his.size();
+			if (d > 0) {
+				// System.out.println("dosave");
+				JFileChooser chooser = new JFileChooser();
+				chooser.setCurrentDirectory(new java.io.File("/home/amneiht/Desktop/anh"));
+				chooser.setDialogTitle("choosertitle");
+				chooser.setFileFilter(new sjpg());
+				chooser.setFileFilter(new spng());
+				chooser.setFileFilter(new Fvt());
+				if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+					String a = chooser.getSelectedFile().getPath();
+					String b = file.list.getex(chooser.getFileFilter().getDescription());
+					System.out.println(b);
+					if (b.equals("vt")) {
+						if (is != null)
+							is.save(a);
+					} else
+						buff.save(his.get(d - 1), a, b);
+				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		repaint();
 
@@ -413,8 +441,8 @@ public class tool extends JFrame implements ActionListener, WindowListener, KeyL
 
 	private void dokhoiphuc() {
 		if (is != null) {
-			is.khoiphuc();
-			addlist(is.paintimg());
+			// is.khoiphuc();
+			addlist(is.kp(nocolor));
 			repaint();
 		}
 
@@ -460,7 +488,6 @@ public class tool extends JFrame implements ActionListener, WindowListener, KeyL
 		repaint();
 	}
 
-	@SuppressWarnings("unused")
 	private void dosegment() {
 		String s = (String) JOptionPane.showInputDialog(this, "amneiht", "nhap so mau", JOptionPane.PLAIN_MESSAGE);
 		try {
@@ -468,12 +495,31 @@ public class tool extends JFrame implements ActionListener, WindowListener, KeyL
 			if (s != null) {
 				int p = Integer.parseInt(s);
 				if (d > 0) {
-					Img2 cmn;
-					Img xx;
-					BufferedImage in = new Img2(his.get(d - 1), p).segment();
+					Kmean sg = new Kmean(his.get(d - 1), p);
+					BufferedImage in = sg.segment();
 					addlist(in);
+					nocolor = sg.nocolor();
 				}
 			}
+		} catch (Exception se) {
+			se.printStackTrace();
+
+		}
+		repaint();
+
+	}
+
+	private void dosegment2() {
+		try {
+			int d = his.size();
+			if (d > 0) {
+
+				Kmean2 sg = new Kmean2(his.get(d - 1), Math.E);
+				BufferedImage in = sg.segment();
+				addlist(in);
+				nocolor = sg.nocolor();
+			}
+
 		} catch (Exception se) {
 			se.printStackTrace();
 
@@ -501,7 +547,13 @@ public class tool extends JFrame implements ActionListener, WindowListener, KeyL
 		if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 			try {
 				//
-				addlist(buff.get(chooser.getSelectedFile().getPath()));
+				String d = chooser.getSelectedFile().getPath();
+				if (d.endsWith(".vt")) {
+					is = img.read(d);
+					his.add(is.paintimg());
+				} else
+					addlist(buff.get(d));
+				// System.out.println(chooser.getSelectedFile().getPath());
 			} catch (IOException e1) {
 
 				e1.printStackTrace();
@@ -523,6 +575,38 @@ public class tool extends JFrame implements ActionListener, WindowListener, KeyL
 		repaint();
 	}
 
+	public void adjustmentValueChanged(AdjustmentEvent e) {
+		if (e.getSource() == bar1) {
+
+			int d = bar1.getValue();
+
+			int z = his.size();
+
+			if (z > 0) {
+				BufferedImage in = his.get(z - 1);
+				if (in.getWidth() > getWidth()) {
+					x = (((in.getWidth() - getWidth()) * d) / 90);
+					// .out.println("bar1 :" + x);
+					repaint();
+				}
+			}
+		} else if (e.getSource() == bar2) {
+
+			int d = bar2.getValue();
+
+			int z = his.size();
+
+			if (z > 0) {
+				BufferedImage in = his.get(z - 1);
+				if (in.getHeight() > getHeight()) {
+					y = (((in.getHeight() - getHeight()) * d) / 90);
+					// System.out.println("bar2 :" + y);
+					repaint();
+				}
+			}
+		}
+	}
+
 	private void addlist(BufferedImage bufferedImage) {
 		his.add(bufferedImage);
 		if (his.size() > 10)
@@ -530,32 +614,6 @@ public class tool extends JFrame implements ActionListener, WindowListener, KeyL
 	}
 
 	public void windowOpened(WindowEvent e) {
-
-	}
-
-	public void windowClosing(WindowEvent e) {
-
-		System.out.println("cmn");
-		System.exit(NORMAL);
-	}
-
-	public void windowClosed(WindowEvent e) {
-
-	}
-
-	public void windowIconified(WindowEvent e) {
-
-	}
-
-	public void windowDeiconified(WindowEvent e) {
-
-	}
-
-	public void windowActivated(WindowEvent e) {
-
-	}
-
-	public void windowDeactivated(WindowEvent e) {
 
 	}
 
@@ -596,17 +654,12 @@ public class tool extends JFrame implements ActionListener, WindowListener, KeyL
 
 	}
 
-	@Override
-	public void mouseDragged(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+	// public void mouseDragged(MouseEvent arg0) {
+	// }
+	// public void mouseMoved(MouseEvent arg0) {
+	// int x = arg0.getX() - 10;
+	// int y = arg0.getY() - 80;
+	// lblTd.setText("x" + x + "y" + y);
+	// }
 
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		int x = arg0.getX() - 10;
-		int y = arg0.getY() - 80;
-		lblTd.setText("x" + x + "y" + y);
-	}
 }

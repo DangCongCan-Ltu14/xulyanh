@@ -2,7 +2,6 @@ package xla;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -43,15 +42,8 @@ public class buff {
 	}
 
 	public static BufferedImage get(String f) throws IOException {
-		//System.out.println(f);
 		BufferedImage in = ImageIO.read(new File(f));
-
-		BufferedImage newImage = new BufferedImage(in.getWidth(), in.getHeight(), BufferedImage.TYPE_INT_RGB);
-		// System.out.println(in.getWidth());
-		Graphics2D g = newImage.createGraphics();
-		g.drawImage(in, 0, 0, null);
-		g.dispose();
-		return newImage;
+		return in;
 	}
 
 }

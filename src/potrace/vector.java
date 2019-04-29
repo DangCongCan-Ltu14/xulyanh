@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import base.point;
+import base.stack;
 import base.svg.img;
 import base.svg.poly;
 

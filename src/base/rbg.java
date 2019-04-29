@@ -65,7 +65,6 @@ public class rbg {
 	}
 	public void add(int sl) {
 		//a = a + ((sl & 0xff000000) >> 24);
-		a=255;
 		r = r + ((sl & 0xff0000) >> 16);
 		b = b + ((sl & 0xff00) >> 8);
 		g = g + (sl & 0xff);
@@ -83,8 +82,6 @@ public class rbg {
 	public int div(int d) {
 		if (d == 0)
 			return get();
-		//a = a / d;
-		a=255;
 		b = b / d;
 		r = r / d;
 		g = g / d;
@@ -93,7 +90,7 @@ public class rbg {
 
 	public int get() {
 		int res = 0;
-		res = (r << 16) | (b << 8) | g | (a << 24);
+		res = (r << 16) | (b << 8) | g | (255 << 24);
 		return res;
 	}
 

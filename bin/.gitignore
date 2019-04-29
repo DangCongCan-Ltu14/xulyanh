@@ -1,7 +1,6 @@
 /base/
 /cuver/
 /file/
-/p2/
 /potrace/
 /pv3/
 /segment/
@@ -9,3 +8,7 @@
 /tool$1.class
 /tool.class
 /xla/
+/SwingControlDemo$1.class
+/SwingControlDemo$2.class
+/SwingControlDemo$3.class
+/SwingControlDemo.class

@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 
 public class bina {
 	public static BufferedImage segment(BufferedImage in) {
-		Img p = new Img(in, 2);
+		Kmean p = new Kmean(in, 2);
 		BufferedImage res = p.segment();
 		int a = p.cent[0].get(), b = p.cent[1].get();
 		if(a<b) a=b;
