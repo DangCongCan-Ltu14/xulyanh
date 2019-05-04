@@ -18,12 +18,7 @@ public class test {
 
 	// @SuppressWarnings("unused")
 	public static void main(String[] args) {
-		 System.gc();
-		 String s = "/home/amneiht/Desktop/anh/test.vt";
-		 vt(1);
-//		 img k = op(s);
-//		 show.pr(k.paintimg(), "kp");
-		//tt();
+	
 	}
 
 	public static img op(String file) {
