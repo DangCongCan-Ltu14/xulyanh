@@ -6,7 +6,7 @@ import java.util.List;
 
 import base.point;
 
-public class path {
+class  path {
 	private List<point> lp = new LinkedList<point>(); // toa do diem
 	private List<Integer> vt = new LinkedList<Integer>();//// vi tri diem dac biet
 	int color;

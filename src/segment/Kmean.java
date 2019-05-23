@@ -6,7 +6,7 @@ import java.util.Random;
 import base.rbg;
 
 public class Kmean {
-	int[] max, min;
+	//private int[] max, min;
 	int x, y;
 	int[][] mg;
 	int[][] last;

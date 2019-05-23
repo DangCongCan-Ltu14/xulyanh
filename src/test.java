@@ -1,75 +1,82 @@
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileReader;
+import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import base.point;
-import base.rbg;
 import base.show;
-import base.svg.img;
-import base.svg.poly;
 import pv3.vector;
 import segment.Kmean2;
+import xla.loc;
 
 //import potrace.vector;
 public class test {
 	static final int length = 4096;
+	static String fl = "/home/amneiht/Desktop/anh";
 
 	// @SuppressWarnings("unused")
 	public static void main(String[] args) {
-	
+		try {
+			BufferedImage in = ImageIO.read(new File(fl+"/test/350.jpg"));
+			BufferedImage tin=scale(in);
+			show.pr(in);
+			show.pr(tin);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
-	public static img op(String file) {
+	void toolest() {
+		File dt = new File(fl + "/kmean");
+		if (!dt.exists())
+			dt.mkdirs();
+		dt = new File(fl + "/vecto");
+		if (!dt.exists())
+			dt.mkdirs();
+		dt = new File(fl + "/gauss");
+		if (!dt.exists())
+			dt.mkdirs();
 		try {
-			FileReader in = new FileReader(file);
-			int x = in.read();
-			int y = in.read();
-			img d = new img(x, y);
-			int n = in.read();
-			while(n>0) {
-				
-				int r = in.read();
-				int g = in.read();
-				int b = in.read();
-				rbg cl = new rbg(255, r, g, b);
-				poly p = new poly(cl.get());
-				for (int j = 0; j < n; j++) {
-					x = in.read();
-					y = in.read();
-					p.add(new point(x, y));
+			File kl = new File(fl + "/test");
+			if (kl.isDirectory()) {
+				for (File vkl : kl.listFiles()) {
+					// System.out.println(vkl.getName());
+					make(vkl);
 				}
-				d.add(p);
-				n = in.read();
 			}
-			in.close();
-			return d;
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
 	}
 
-	public static void vt(double n) {
-		String f = "/home/amneiht/Desktop/anh/rg.jpg";
-		try {
-			// BufferedImage bf =new BufferedImage(100, 100, BufferedImage.TYPE_3BYTE_BGR);
-			BufferedImage res = ImageIO.read(new File(f));
-			// Kmean2 sm=new Kmean2(res,Math.PI);
-			Kmean2 sm = new Kmean2(res, n);
-			res = sm.segment();
-			// show.pr(res,"kp");
-			img km = new vector(res, 20).creat();
-			show.pr(km.paintimg(), "ve lai");
-			// System.gc();
-	//		km.save("/home/amneiht/Desktop/anh/test");
-			//
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+	private static void make(File vkl) throws IOException {
+		// TODO Auto-generated method stub
+		BufferedImage in = ImageIO.read(vkl);
+		// Show.pr
+		BufferedImage tb = loc.tb(in);
+		String fle = fl + "/gauss/" + vkl.getName();
+		ImageIO.write(tb, "jpg", new File(fle));
+		tb = new Kmean2(in, 9).segment();
+		fle = fl + "/kmean/" + vkl.getName();
+		ImageIO.write(tb, "jpg", new File(fle));
+		fle = fl + "/vecto/" + vkl.getName();
+		tb = new vector(tb, 5).creat().paintimg();
+		ImageIO.write(tb, "jpg", new File(fle));
 	}
 
+	private static BufferedImage scale(BufferedImage tin) {
+		double h = 300.0 / Math.max(tin.getHeight(), tin.getWidth());
+		int y = (int) (tin.getHeight() * h), x = (int) (tin.getWidth() * h);
+		BufferedImage in = new BufferedImage(x, y, tin.getType());
+		Image tmp = tin.getScaledInstance(x, y, Image.SCALE_SMOOTH);
+		Graphics g = in.getGraphics();
+		g.drawImage(tmp, 0, 0, null);
+		g.dispose();
+		return in;
+	}
 }

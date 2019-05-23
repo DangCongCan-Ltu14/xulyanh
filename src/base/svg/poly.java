@@ -48,30 +48,30 @@ public class poly implements line {
 		return pl;
 	}
 
-	public static boolean cmp(poly a, poly b) {
-		int l = a.p.size();
-		if (l != b.p.size())
-			return false;
-		boolean kq = true;
-		for (int i = 0; i < l; i++) {
-			if (!point.cmp(a.p.get(i), b.p.get(i))) {
-				kq = false;
-				break;
-			}
-
-		}
-		if (kq)
-			return true;
-		kq = true;
-		for (int i = 0; i < l; i++) {
-			if (!point.cmp(a.p.get(i), b.p.get(l - i - 1))) {
-				kq = false;
-				break;
-			}
-
-		}
-		return kq;
-	}
+//	private static boolean cmp(poly a, poly b) {
+//		int l = a.p.size();
+//		if (l != b.p.size())
+//			return false;
+//		boolean kq = true;
+//		for (int i = 0; i < l; i++) {
+//			if (!point.cmp(a.p.get(i), b.p.get(i))) {
+//				kq = false;
+//				break;
+//			}
+//
+//		}
+//		if (kq)
+//			return true;
+//		kq = true;
+//		for (int i = 0; i < l; i++) {
+//			if (!point.cmp(a.p.get(i), b.p.get(l - i - 1))) {
+//				kq = false;
+//				break;
+//			}
+//
+//		}
+//		return kq;
+//	}
 
 	@Override
 	public void setCor(int c) {
