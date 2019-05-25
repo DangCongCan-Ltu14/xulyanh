@@ -18,7 +18,7 @@ public class View extends JFrame {
 	public View(Act p) {
 		tl = p;
 		setTitle("Preview");
-		setSize(350, 400);
+		setSize(320, 350);
 		setVisible(true);
 		setDefaultLookAndFeelDecorated(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

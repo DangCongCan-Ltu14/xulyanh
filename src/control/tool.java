@@ -31,7 +31,7 @@ public class tool extends JFrame implements KeyListener, AdjustmentListener {
 	 * @author amneiht
 	 *
 	 */
-	
+
 	static final long serialVersionUID = -2667525690602204291L;
 	protected int mx = 1700, my = 800;
 	protected JMenuBar menuBar;
@@ -64,7 +64,7 @@ public class tool extends JFrame implements KeyListener, AdjustmentListener {
 	protected JMenuItem mntmltv;
 	protected JMenu mnSegment;
 	protected JMenuItem mntmSegment;
-	//protected Act action;
+	// protected Act action;
 	protected JMenu mnGiaoDien;
 	protected JMenu mnSetsize;
 	protected JRadioButtonMenuItem rdbtnmntmNimbus;
@@ -72,9 +72,10 @@ public class tool extends JFrame implements KeyListener, AdjustmentListener {
 	protected JRadioButtonMenuItem rdbtnmntmResize;
 	protected JRadioButtonMenuItem rdbtnmntmGtk;
 	protected JRadioButtonMenuItem rdbtnmntmPr;
+
 	public tool() {
 		// this.setResizable(false);
-		//action = new Act(this);
+		// action = new Act(this);
 		addmenu();
 		addac();
 		setbar();
@@ -87,7 +88,7 @@ public class tool extends JFrame implements KeyListener, AdjustmentListener {
 
 	private void addgd() {
 		// TODO Auto-generated method stub
-		Actgd ac=new Actgd(this);
+		Actgd ac = new Actgd(this);
 		rdbtnmntmFix.addActionListener(ac);
 		rdbtnmntmResize.addActionListener(ac);
 		rdbtnmntmGtk.addActionListener(ac);
@@ -149,7 +150,7 @@ public class tool extends JFrame implements KeyListener, AdjustmentListener {
 
 		rdbtnmntmResize = new JRadioButtonMenuItem("resize");
 		mnSetsize.add(rdbtnmntmResize);
-		
+
 		rdbtnmntmPr = new JRadioButtonMenuItem("prievew");
 		rdbtnmntmPr.setActionCommand("privew");
 		mnSetting.add(rdbtnmntmPr);
@@ -284,12 +285,12 @@ public class tool extends JFrame implements KeyListener, AdjustmentListener {
 		try {
 			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
 				if ("GTK+".equals(info.getName())) {
-					UIManager.setLookAndFeel(info.getClassName());
+					 UIManager.setLookAndFeel(info.getClassName());
 					break;
 				}
-			//	System.out.println(info.getName());
-
+				// System.out.println(info.getName());
 			}
+			// UIManager.setLookAndFeel("com.jtattoo.plaf.mint.MintLookAndFeel");
 		} catch (Exception e) {
 			// If Nimbus is not available, you can set the GUI to another look and feel.
 			e.printStackTrace();
