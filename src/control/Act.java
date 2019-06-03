@@ -23,19 +23,19 @@ import xla.buff;
 import xla.loc;
 import xla.loc2;
 
-public class Act implements ActionListener {
-	tool ts;
+class Act implements ActionListener {
+	private tool ts;
 	protected boolean pre = false;
-	int nocolor;
-	img is = null;
-	View k ;
+	private int nocolor;
+	private img is = null;
+	private View k ;
+	private int ths = -1;
+	private ActionEvent ac;
 
-	int mode = -1;
-	int ths = -1;
-	ActionEvent ac;
-
-	public Act(tool p) {
+	protected Act(tool p) {
 		ts = p;
+		k=new View(this);
+		
 	}
 
 	@Override
@@ -50,14 +50,18 @@ public class Act implements ActionListener {
 		} else if (e.getSource() == ts.KhoiPhuc) {
 			dokhoiphuc();
 		} else if (e.getSource() == ts.rdbtnmntmPr) {
-			pre = !pre;
-			if (pre) {
-				k = new View(this);
-			} else {
-				k.dispose();
+			if(ts.rdbtnmntmPr.isSelected())
+			{
+				pre=true;
+				k.setVisible(true);
+			}
+			else
+			{
+				pre=false;
+				k.setVisible(pre);
 			}
 		}
-		if (pre) {
+		else if (pre) {
 			preview(e);
 		} else {
 			dowork(e);
@@ -100,7 +104,6 @@ public class Act implements ActionListener {
 
 	private void preview(ActionEvent e) {
 		// TODO Auto-generated method stub
-		System.out.println("pre");
 		if (e.getSource() == ts.LocLaplace) {
 			int d = ts.his.size();
 			if (d > 0) {
@@ -170,7 +173,7 @@ public class Act implements ActionListener {
 			int d = ts.his.size();
 			if (d > 0) {
 				BufferedImage in = scale(ts.his.get(d - 1));
-				doloctb();
+				in= loc.tb(in);
 				k.pr(in);
 				ac = e;
 			}
@@ -204,7 +207,7 @@ public class Act implements ActionListener {
 			int d = ts.his.size();
 			if (d > 0) {
 				BufferedImage in = scale(ts.his.get(d - 1));
-				dogauss();
+			in=loc.tg(in);
 				k.pr(in);
 				ac = e;
 			}
@@ -213,7 +216,7 @@ public class Act implements ActionListener {
 			int d = ts.his.size();
 			if (d > 0) {
 				BufferedImage in = scale(ts.his.get(d - 1));
-				dotach();
+				in=loc.tds(in);
 				k.pr(in);
 				ac = e;
 			}
@@ -222,7 +225,7 @@ public class Act implements ActionListener {
 			int d = ts.his.size();
 			if (d > 0) {
 				BufferedImage in = scale(ts.his.get(d - 1));
-				doltv();
+				in=ltv.tv(in);
 				k.pr(in);
 				ac = e;
 			}
@@ -239,7 +242,7 @@ public class Act implements ActionListener {
 
 	}
 
-	public void done() {
+	protected void done() {
 		if (ac != null) {
 			dowork(ac);
 			ths = -1;
@@ -259,7 +262,7 @@ public class Act implements ActionListener {
 		return in;
 	}
 
-	void doltv() {
+	private void doltv() {
 		int d = ts.his.size();
 		try {
 
@@ -275,7 +278,7 @@ public class Act implements ActionListener {
 
 	}
 
-	void dotach() {
+	private void dotach() {
 		int d = ts.his.size();
 		try {
 
@@ -290,7 +293,7 @@ public class Act implements ActionListener {
 
 	}
 
-	void dolocg2() {
+	private void dolocg2() {
 		try {
 			if (ths < 0) {
 				String s = (String) JOptionPane.showInputDialog(ts, "amneiht", "nhap sai so",
@@ -313,7 +316,7 @@ public class Act implements ActionListener {
 
 	}
 
-	void doSvg() {
+	private void doSvg() {
 		if (is != null) {
 			int d = ts.his.size();
 			if (d > 0) {
@@ -329,7 +332,7 @@ public class Act implements ActionListener {
 
 	}
 
-	void doBina() {
+	private void doBina() {
 
 		int d = ts.his.size();
 		if (d > 0) {
@@ -338,7 +341,7 @@ public class Act implements ActionListener {
 
 	}
 
-	void dosaveAs() {
+	private void dosaveAs() {
 		try {
 			int d = ts.his.size();
 			if (d > 0) {
@@ -366,7 +369,7 @@ public class Act implements ActionListener {
 
 	}
 
-	void doloctb() {
+	private void doloctb() {
 		int d = ts.his.size();
 		if (d > 0) {
 			BufferedImage in = loc.tb(ts.his.get(d - 1));
@@ -375,7 +378,7 @@ public class Act implements ActionListener {
 
 	}
 
-	void dokhoiphuc() {
+	private void dokhoiphuc() {
 		if (is != null) {
 			// is.khoiphuc();
 			ts.addlist(is.kp(nocolor));
@@ -384,23 +387,8 @@ public class Act implements ActionListener {
 
 	}
 
-	void dovecto() {
+	private void dovecto() {
 		is = null;
-		// String s = (String) JOptionPane.showInputDialog(ts, "amneiht", "nhap sai so",
-		// JOptionPane.PLAIN_MESSAGE);
-		// try {
-		// int d = ts.his.size();
-		// int p = Integer.parseInt(s);
-		// if (d > 0) {
-		// if (p == 0)
-		// p = 1;
-		// is = new vector(ts.his.get(d - 1), p).creat();
-		// ts.addlist(is.paintimg());
-		// }
-		// } catch (Exception se) {
-		// System.out.println("loi nhap so");
-		//
-		// }
 		try {
 			if (ths < 0) {
 				String s = (String) JOptionPane.showInputDialog(ts, "amneiht", "nhap sai so",
@@ -424,7 +412,7 @@ public class Act implements ActionListener {
 
 	}
 
-	void doinvert() {
+	private void doinvert() {
 		int d = ts.his.size();
 		if (d > 0) {
 			BufferedImage in = loc.imgiv(ts.his.get(d - 1));
@@ -487,7 +475,7 @@ public class Act implements ActionListener {
 
 	}
 
-	void loLaplace() {
+	private void loLaplace() {
 		int d = ts.his.size();
 		if (d > 0) {
 			BufferedImage in = loc.tc(ts.his.get(d - 1));
@@ -496,11 +484,12 @@ public class Act implements ActionListener {
 
 	}
 
-	void doOpen() {
+	private void doOpen() {
 		JFileChooser chooser = new JFileChooser();
 		chooser.setCurrentDirectory(new java.io.File("/home/amneiht/Desktop/anh"));
 		chooser.setDialogTitle("choosertitle");
-
+		ts.his.removeAll(ts.his);
+		ts.pre.removeAll(ts.pre);
 		chooser.setAcceptAllFileFilterUsed(false);
 		if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 			try {
@@ -538,7 +527,7 @@ public class Act implements ActionListener {
 
 	}
 
-	void dogauss() {
+	protected void dogauss() {
 		int d = ts.his.size();
 		if (d > 0) {
 			// System.out.println("gause");

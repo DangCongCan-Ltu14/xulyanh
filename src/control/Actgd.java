@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
-public class Actgd implements ActionListener {
+class Actgd implements ActionListener {
 	tool ts;
 
 	public Actgd(tool p) {

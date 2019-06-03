@@ -44,12 +44,14 @@ public class tool extends JFrame implements KeyListener, AdjustmentListener {
 	protected JScrollBar bar1;
 	protected JMenuItem gray;
 	protected JMenuItem Invert;
+
 	protected JMenuItem segment;
 	protected JMenuItem LocGauss;
 	protected JMenuItem LocTrungBinh;
 	protected JMenuItem LocLaplace;
 	protected JMenuItem SaveAs;
 	protected List<BufferedImage> his = new LinkedList<BufferedImage>();
+	protected List<BufferedImage> pre = new LinkedList<BufferedImage>();
 	protected boolean fix = true;
 	protected int dx = 0, dy = 0;
 	protected int x = 0, y = 0;
@@ -82,12 +84,7 @@ public class tool extends JFrame implements KeyListener, AdjustmentListener {
 		addgd();
 	}
 
-	public tool(String string) {
-		// TODO Auto-generated constructor stub
-	}
-
 	private void addgd() {
-		// TODO Auto-generated method stub
 		Actgd ac = new Actgd(this);
 		rdbtnmntmFix.addActionListener(ac);
 		rdbtnmntmResize.addActionListener(ac);
@@ -285,7 +282,7 @@ public class tool extends JFrame implements KeyListener, AdjustmentListener {
 		try {
 			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
 				if ("GTK+".equals(info.getName())) {
-					 UIManager.setLookAndFeel(info.getClassName());
+					UIManager.setLookAndFeel(info.getClassName());
 					break;
 				}
 				// System.out.println(info.getName());
@@ -338,7 +335,8 @@ public class tool extends JFrame implements KeyListener, AdjustmentListener {
 
 	protected void addlist(BufferedImage bufferedImage) {
 		his.add(bufferedImage);
-		if (his.size() > 10)
+		pre.removeAll(pre);
+		if (his.size() > 20)
 			his.remove(0);
 	}
 
@@ -375,13 +373,28 @@ public class tool extends JFrame implements KeyListener, AdjustmentListener {
 
 		if (e.getKeyChar() == 'z')
 			doctrlz();
+		else if (e.getKeyChar() == 'r')
+			doctrlr();
 	}
 
 	protected void doctrlz() {
 
 		int d = his.size();
 		if (d > 1) {
-			his.remove(d - 1);
+			pre.add(0, his.remove(d - 1));
+		}
+		repaint();
+	}
+
+	protected void doctrlr() {
+
+		int d = pre.size();
+		if (d > 0) {
+			System.out.println("ss");
+			his.add(pre.remove(0));
+			if (his.size() > 20)
+				his.remove(0);
+
 		}
 		repaint();
 	}

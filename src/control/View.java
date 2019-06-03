@@ -10,18 +10,20 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-public class View extends JFrame {
-	BufferedImage in = null;
-	int x = 0, y = 0;
-	Act tl;
+class View extends JFrame {
+	private BufferedImage in = null;
+//	private int x = 0, y = 0;
+	private Act tl;
 
-	public View(Act p) {
+	public View(Act p) 
+	{
 		tl = p;
 		setTitle("Preview");
 		setSize(320, 350);
-		setVisible(true);
+		setLocation(700, 00);
+		setVisible(false);
 		setDefaultLookAndFeelDecorated(false);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		btnOk = new JButton("ok");
 		btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
