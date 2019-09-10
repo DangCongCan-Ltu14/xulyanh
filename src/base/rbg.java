@@ -112,4 +112,9 @@ public class rbg {
 		g =  (sl & 0xff);
 		return (r+g+b)/3;
 	}
+	public static int pgray(int c)
+	{
+		rbg k=new rbg(255,c,c,c);
+		return k.get();
+	}
 }
