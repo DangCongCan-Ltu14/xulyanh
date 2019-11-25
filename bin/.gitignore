@@ -2,9 +2,9 @@
 /control/
 /cuver/
 /file/
+/histogram/
 /potrace/
 /pv3/
 /segment/
-/xla/
 /test.class
-/histogram/
+/xla/

@@ -45,7 +45,7 @@ public class rbg {
 		g = is[2];
 		b = is[3];
 	}
-
+	
 	public void reset() {
 		// TODO Auto-generated method stub
 		a = 255;

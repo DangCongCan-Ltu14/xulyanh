@@ -9,25 +9,25 @@ import xla.buff;
 import xla.loc;
 
 public class His {
-	static String text = "/home/amneiht/Downloads/a.jpg";
+	static String text = "/home/dccan/Pictures/b.jpeg";
 	public static void main(String[] args) {
 		try {
 			BufferedImage in = buff.get(text);
 			show.pr(loc.imggray(in));
 			int x = in.getWidth(), y = in.getHeight();
+			
 			int p=rbg.getGray(in.getRGB(0,0));
 			
-			int min = p, max = p;
+			long k=0;
 			int[][] mg=new int [x][y];
 			for (int i = 00; i < x; i++)
 				for (int j = 0; j < y; j++) {
 					p=rbg.getGray(in.getRGB(i,j));
-					if(p>max) max=p;
-					else if(min>p) min =p;
+					k=k+p ;
 					mg[i][j]=p;
 				}
-			System.out.println(max-min);
-			Bac1 bb=new Bac1(59);
+			System.out.println("do sang "+(k*1.0/(x*y)));
+			Bac1 bb=new Bac1(60);
 			printimage(bb,mg);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -45,6 +45,6 @@ public class His {
 				in.setRGB(i, j, rbg.pgray(c));
 				
 			}
-		show.pr(in, "dkm");
+		show.pr(in, "dkm atrix");
 	}
 }

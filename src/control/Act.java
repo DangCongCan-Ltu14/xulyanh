@@ -28,14 +28,14 @@ class Act implements ActionListener {
 	protected boolean pre = false;
 	private int nocolor;
 	private img is = null;
-	private View k ;
+	private View k;
 	private int ths = -1;
 	private ActionEvent ac;
 
 	protected Act(tool p) {
 		ts = p;
-		k=new View(this);
-		
+		k = new View(this);
+
 	}
 
 	@Override
@@ -50,18 +50,14 @@ class Act implements ActionListener {
 		} else if (e.getSource() == ts.KhoiPhuc) {
 			dokhoiphuc();
 		} else if (e.getSource() == ts.rdbtnmntmPr) {
-			if(ts.rdbtnmntmPr.isSelected())
-			{
-				pre=true;
+			if (ts.rdbtnmntmPr.isSelected()) {
+				pre = true;
 				k.setVisible(true);
-			}
-			else
-			{
-				pre=false;
+			} else {
+				pre = false;
 				k.setVisible(pre);
 			}
-		}
-		else if (pre) {
+		} else if (pre) {
 			preview(e);
 		} else {
 			dowork(e);
@@ -173,7 +169,7 @@ class Act implements ActionListener {
 			int d = ts.his.size();
 			if (d > 0) {
 				BufferedImage in = scale(ts.his.get(d - 1));
-				in= loc.tb(in);
+				in = loc.tb(in);
 				k.pr(in);
 				ac = e;
 			}
@@ -207,7 +203,7 @@ class Act implements ActionListener {
 			int d = ts.his.size();
 			if (d > 0) {
 				BufferedImage in = scale(ts.his.get(d - 1));
-			in=loc.tg(in);
+				in = loc.tg(in);
 				k.pr(in);
 				ac = e;
 			}
@@ -216,7 +212,7 @@ class Act implements ActionListener {
 			int d = ts.his.size();
 			if (d > 0) {
 				BufferedImage in = scale(ts.his.get(d - 1));
-				in=loc.tds(in);
+				in = loc.tds(in);
 				k.pr(in);
 				ac = e;
 			}
@@ -225,7 +221,7 @@ class Act implements ActionListener {
 			int d = ts.his.size();
 			if (d > 0) {
 				BufferedImage in = scale(ts.his.get(d - 1));
-				in=ltv.tv(in);
+				in = ltv.tv(in);
 				k.pr(in);
 				ac = e;
 			}
@@ -450,6 +446,7 @@ class Act implements ActionListener {
 
 				}
 			}
+			ths = -1;
 		} catch (Exception se) {
 			se.printStackTrace();
 
